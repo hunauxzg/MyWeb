@@ -14,3 +14,12 @@ npm install
 npm run start
 ```
 然后在浏览器中打开 [http://localhost:3000](http://localhost:3000)
+
+## 技术栈
+1. git / svn
+2. html / js / css
+3. nodejs，node / npm
+4. 基于nodejs的express框架
+5. MD(markdown)
+6. http get/post
+7. jquery库
