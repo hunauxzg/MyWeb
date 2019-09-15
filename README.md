@@ -23,3 +23,9 @@ npm run start
 5. MD(markdown)
 6. http get/post
 7. jquery库
+
+## GIT COMMAND
+1. git add *
+2. git commit -m "update"
+3. git pull
+4. git push
