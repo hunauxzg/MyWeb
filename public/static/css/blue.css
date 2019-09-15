@@ -1,0 +1,94 @@
+#interface > .header {
+    background: url(../../static/img/blue_header.png) !important;
+	background-size: cover;
+}
+.dispatch > .left .titleDiv::after {
+    border: 16px solid #3880b0 !important;
+    border-right: 16px solid transparent !important;
+    border-bottom: 16px solid transparent !important;
+}
+.tree-nav>div {
+    color: white !important;
+}
+.tree-nav>div.active {
+    color: #166ba8 !important;
+}
+.dispatch > .left .titleDiv .voice:hover {
+    background: #74a5d0 !important;
+}
+.dispatch > .left .ulWrap {
+    color: white !important;
+}
+.dispatch > .left > .group {
+    color: white !important;
+}
+.dispatch > .left > .group li div{
+    color: white !important;
+}
+.dispatch > .left .titleDiv .voice {
+    background-color: #3880b0 !important;
+}
+.dispatch > .left .titleDiv .title {
+    background-color: #041523 !important;
+}
+.dispatch > .left .search input {
+    background-color: #fff !important;
+    color: #4c4c4c !important;
+}
+.dispatch > .left .ulWrap {
+    background-color: #041523 !important;
+}
+.dispatch > .left .addGroup {
+    background-color: #166ba8 !important;
+}
+.dispatch > .left .addGroup:hover {
+    background-color: #317ca8 !important;
+}
+.dispatch > .left > .group > .groupUl > ul > li {
+    background-color: #467890 !important;
+}
+.dispatch > .left > .group > .groupUl > ul > li.active {
+    background-color: #398eb8 !important;
+    border: 2px solid #fff !important;
+}
+.dispatch > .left .treeWrap .tree-node:hover {
+    background-color: rgba(35, 91, 119, 0.6) !important;
+}
+.dispatch > .left .treeWrap .tree-node.active {
+    background-color: rgba(35, 91, 119, 0.6) !important;
+}
+.dispatch > .left .treeWrap li .tree-collapsed {
+    background-image: url('../img/right.png') !important;
+}
+.dispatch > .left .treeWrap li .tree-collapsed:hover {
+    background-image: url('../img/righthover.png') !important;
+}
+.dispatch > .left .treeWrap li .tree-expanded {
+    background-image: url('../img/down.png') !important;
+}
+.dispatch > .left .treeWrap li .tree-expanded:hover {
+    background-image: url('../img/downhover.png') !important;
+}
+.dispatch > .left .treeWrap li .tree-icon {
+    background-image: url('../img/group_white.png') !important;
+}
+.dispatch > .left > .group {
+    background-color: #041523 !important;
+}
+.dispatch > .right .time {
+    background-color: #041523 !important;
+}
+.dispatch > .right .functionBar > ul li {
+    background-color: #1a3b55 !important;
+}
+.dispatch > .right .functionBar > ul li:hover {
+    background: #3b92bd !important;
+}
+.dispatch > .right .functionBar > ul li {
+    color: white !important;
+}
+/* 无地图版本修改当前用户信息弹窗样式错乱纠正 */
+#editDataId{
+    width: 340px !important;
+    height: 349px !important;
+}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<script src="jquery.min.js"></script>
+<script src="jquery.easyui-1.5.1.min.js"></script>
+<script src="locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" href="../icon/iconfont.css">
+<link rel="stylesheet" href="themes/insdep/easyui.css">
+<link rel="stylesheet" href="themes/insdep/icon.css">
+<link rel="stylesheet" href="themes/insdep/iconfont/demo.css">
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: "Microsoft YaHei Light";
+    }
+    body{
+        background-color: black;
+    }
+    .icon {
+        font-family: iconfont!important;
+    }
+    .lf-bot-bt{
+        position: absolute;
+        left:50px;
+        bottom:50px;
+        z-index:100;
+        width:100px;
+        height:26px;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        background-color: white;
+        cursor: pointer;
+    }
+    .lf-bot-bt .icon{
+        width:26px;
+        height:24px;
+        background-color:#eeeeee;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 23px;
+        margin:1px 1px 2px 1px;
+        border-radius: 2px;
+    }
+    .lf-bot-bt.hideOffline{
+        bottom:86px;
+    }
+
+    .lf-bot-bt:hover .icon{
+        background-color: #dcdcdc;
+    }
+    .lf-bot-bt .hideOffline-inner
+    {
+        background-color: #f45454;
+        width:71px;
+        height:24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color:white;
+        border-radius: 2px;
+    }
+
+    .lf-bot-bt .showNocustoms-inner{
+        background-color: #2585cb;
+        width:71px;
+        height:24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color:white;
+        border-radius: 2px;
+    }
+</style>
+</head>
+
+<body>
+<div class="lf-bot-bt hideOffline"></div>
+<div class="lf-bot-bt showNocustoms"></div>
+
+<script>
+    hideOfflineAndshowNocustomsToggle()
+    function hideOfflineAndshowNocustomsToggle() {
+        let hideToggle = false
+        let showToggle = false
+        $('.lf-bot-bt.hideOffline').append('    <div class="icon">&#xe6cd;</div>\n' +
+            '    <div class="hideOffline-inner">隐藏离线</div>')
+        $('.lf-bot-bt.showNocustoms').append('<div class="icon">&#xe6ce;</div>\n' +
+            '    <div class="showNocustoms-inner">显示非关</div>')
+        $('.lf-bot-bt.hideOffline').on('click',()=> {
+            hideToggle = !hideToggle
+            if(hideToggle){
+                $('.lf-bot-bt.hideOffline .icon').html('&#xe6cf;')
+                $('.lf-bot-bt.hideOffline .hideOffline-inner').text('显示离线').css('background-color','#2585cb')
+            }else{
+                $('.lf-bot-bt.hideOffline .icon').html('&#xe6cd;')
+                $('.lf-bot-bt.hideOffline .hideOffline-inner').text('隐藏离线').css('background-color','#f45454')
+            }
+        })
+        $('.lf-bot-bt.hideOffline').hover(()=>{
+            if(hideToggle){
+                $('.lf-bot-bt.hideOffline').css('background-color','#11486f')
+                $('.lf-bot-bt.hideOffline .hideOffline-inner').css('background-color','#1e77b7')
+            }else{
+                $('.lf-bot-bt.hideOffline').css('background-color','#9a2929')
+                $('.lf-bot-bt.hideOffline .hideOffline-inner').css('background-color','#df4a4a')
+            }
+        },()=>{
+            if(hideToggle){
+                $('.lf-bot-bt.hideOffline').css('background-color','#ffffff')
+                $('.lf-bot-bt.hideOffline .hideOffline-inner').css('background-color','#2585cb')
+            }else{
+                $('.lf-bot-bt.hideOffline').css('background-color','#ffffff')
+                $('.lf-bot-bt.hideOffline .hideOffline-inner').css('background-color','#f45454')
+            }
+        })
+        $('.lf-bot-bt.showNocustoms').on('click',()=> {
+            showToggle = !showToggle
+            if(showToggle){
+                $('.lf-bot-bt.showNocustoms .icon').html('&#xe6d0;')
+                $('.lf-bot-bt.showNocustoms .showNocustoms-inner').text('隐藏非关').css('background-color','#f45454')
+            }else{
+                $('.lf-bot-bt.showNocustoms .icon').html('&#xe6ce;')
+                $('.lf-bot-bt.showNocustoms .showNocustoms-inner').text('显示非关').css('background-color','#2585cb')
+            }
+        })
+        $('.lf-bot-bt.showNocustoms').hover(()=>{
+            if(showToggle){
+                $('.lf-bot-bt.showNocustoms').css('background-color','#9a2929')
+                $('.lf-bot-bt.showNocustoms .showNocustoms-inner').css('background-color','#df4a4a')
+            }else{
+                $('.lf-bot-bt.showNocustoms').css('background-color','#11486f')
+                $('.lf-bot-bt.showNocustoms .showNocustoms-inner').css('background-color','#1e77b7')
+            }
+        },()=>{
+            if(showToggle){
+                $('.lf-bot-bt.showNocustoms').css('background-color','#ffffff')
+                $('.lf-bot-bt.showNocustoms .showNocustoms-inner').css('background-color','#f45454')
+            }else{
+                $('.lf-bot-bt.showNocustoms').css('background-color','#ffffff')
+                $('.lf-bot-bt.showNocustoms .showNocustoms-inner').css('background-color','#2585cb')
+            }
+        })
+
+    }
+</script>
+</body>
+</html>

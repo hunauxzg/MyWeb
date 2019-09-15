@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EasyNVR</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<!--[if lt IE 9]>
+        <script src="./videostatic/html5shiv.min.js"></script>
+        <script src="./videostatic/respond.min.js"></script>
+        <![endif]-->
+	<script src="./videostatic/jquery.min.js"></script>
+    <meta name="description" content="直播啦，小伙伴们，快来围观呀！" />
+	
+	<link rel="stylesheet" href="./videostatic/video-js.css"/>
+	<script src="./videostatic/video.js"></script>
+	<script src="./videostatic/videojs-contrib-hls4.js"></script>
+
+    <style>
+        .vjs-progress-control,.vjs-remaining-time-display{
+            visibility: hidden;
+        }
+        .video-js .vjs-play-control.vjs-playing {
+            visibility: hidden;
+        }
+        .video-js.vjs-playing .vjs-tech {
+            pointer-events: none;
+        }
+        .video-inner{
+        	position:absolute;
+        	top:0;
+        	bottom:50px;
+        	left:0;
+        	right:0;
+        }
+        .video-choose{
+        	position:absolute;
+        	bottom:0;
+        	right:0;
+        	width:100%;
+        	height:50px;
+        	line-height: 50px;
+        }
+    </style>
+</head>
+
+<body class="skin-green layout-top-nav">
+	<div>
+		<div class="video-inner">
+			<video id="videojs" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%; height: 100%;" controls preload="none"
+		        poster="" x5-video-player-fullscreen="true" x5-video-player-type="h5">
+		        <source src="" type="rtmp/flv" id="video_source"></source>
+		        <p class="vjs-no-js">
+		            To view this video please enable JavaScript, and consider upgrading to a web browser that
+		            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+		        </p>
+		    </video>
+		</div>
+		<div class="video-choose">
+			<form>
+<!-- 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;播放地址：<select name="videosrc" id="videosrc">  -->
+<!-- 					<option value="rtmp://124.160.11.21:10101/live/2015">rtmp://124.160.11.21:10101/live/2015</option>  -->
+<!-- 					<option value="rtmp://live.hkstv.hk.lxdns.com/live/hks">rtmp://live.hkstv.hk.lxdns.com/live/hks</option>  -->
+<!-- 				</select> -->
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;播放地址：<input type="text" name="videosrc"  id="videosrc" value="rtmp://live.hkstv.hk.lxdns.com/live/hks" style="width:500px;"/>
+				&nbsp;&nbsp;媒体类型：<input type="text" name="videotype"  id="videotype" value="rtmp/flv" style="width:100px;"/>
+				&nbsp;&nbsp;<button type="button" id="video_play">播放</button>
+				&nbsp;&nbsp;<button type="button" id="video_stop">停止</button>
+			</form>
+		</div>
+	</div>
+	<script>
+		videojs.options.flash.swf = './videostatic/video-js-fixed.swf';
+		videojs.options.techOrder = ['html5','flash'];
+		var player=videojs("videojs",{
+            autoplay : false
+        });
+		$('#video_play').click(function(){
+			var strVideoSrc = $('#videosrc').val();
+			var strVideoType=$('#videotype').val();
+			$('#video_source').prop("src",strVideoSrc).prop("type",strVideoType);
+			player = new videojs("videojs",{
+                autoplay : false
+            }); 
+            player.src(strVideoSrc);
+            player.load();
+            player.play();
+    	});
+		$('#video_stop').click(function(){
+			player.pause();
+    	});
+	</script>
+</body>
+</html>

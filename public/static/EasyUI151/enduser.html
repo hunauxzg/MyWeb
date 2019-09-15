@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.min.js"></script>
+    <script src="jquery.easyui-1.5.1.min.js"></script>
+    <link rel="stylesheet" href="../icon/iconfont.css">
+    <link rel="stylesheet" href="themes/insdep/easyui.css">
+    <link rel="stylesheet" href="themes/insdep/icon.css">
+    <link rel="stylesheet" href="themes/insdep/iconfont/demo.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .icon {
+            font-family: iconfont;
+        }
+        body {
+            padding-top: 200px;
+            padding-left: 200px;
+            background-color: #f6f6f6;
+        }
+        .clearfix {
+            content: "";
+            display: block;
+            clear: both;
+        }
+        .endUser {
+            width: 34px;
+            height: 34px;
+            border: 1px solid #a01a1a;
+            position: absolute;
+            background-color: #ffffff;
+            border-radius: 3px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+
+        }
+        .endUser:hover {
+            opacity: .8;
+        }
+        .endUser > img {
+            width: 30px;
+            height: 30px;
+            border-radius: 2px;
+        }
+        .endUser .endUserAfter {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 1px;
+            border-top: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-left: 4px solid #a01a1a;
+            border-bottom: 4px solid #a01a1a;
+            transform: rotate(-45deg);
+            position: absolute;
+            top: 29px;
+            left: 12px;
+            z-index: 9;
+        }
+        .endUser.leave {
+            -webkit-filter: grayscale(100%);
+            -moz-filter: grayscale(100%);
+            -ms-filter: grayscale(100%);
+            -o-filter: grayscale(100%);
+            filter: grayscale(100%);
+            filter: gray;
+            background-color: rgba(229, 229, 229, 0.6);
+        }
+        .endUser.leave .endUserAfter .white {
+            border-left: 4px solid rgba(236, 236, 236, 1);
+            border-bottom: 4px solid rgba(236, 236, 236, 1);
+        }
+        .endUser .endUserAfter .white {
+            border-top: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-left: 4px solid #ffffff;
+            border-bottom: 4px solid #ffffff;
+            position: absolute;
+            left: -3px;
+            top: -5px;
+        }
+        .endUser > .name {
+            padding-left: 3px;
+            padding-right: 3px;
+            font-size: 12px;
+            position: absolute;
+            white-space: nowrap;
+            background-color: #a01a1a;
+            border-radius: 3px;
+            border: 1px solid #fff;
+            left: 50%;
+            transform: translate(-50%, -23px);
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+        }
+        .endUser .gif {
+            position: absolute;
+            top: -50px;
+            left: 4px;
+            width: 25px;
+            height: 25px;
+        }
+        .endUser .message {
+            font-size: 13px;
+            max-width: 120px;
+            max-height: 60px;
+            padding: 2px 5px 5px 5px;
+            background-color: #fff;
+            position: absolute;
+            top: 4px;
+            left: 43px;
+            border: 1px solid #494e51;
+            border-radius: 3px;
+            line-height: 18px;
+            color: #4c4c4c;
+            word-wrap: break-word;
+            word-break: normal;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+        }
+        .endUser .corner {
+            width: 7px;
+            height: 7px;
+            border: 1px solid #494e51;
+            transform: rotate(45deg);
+            position: absolute;
+            top: 12px;
+            left: 40px;
+            background-color: white;
+            border-top: none;
+            border-right: none;
+        }
+    </style>
+</head>
+<body>
+<script>
+    function reportState(wrap, name) {
+        var com = '<div class="endUser leave">\n' +
+		            '    	<div class="endUserAfter"><div class="white"></div></div>\n' +
+		            '    	<div class="name">800003</div>\n' +
+		            '    	<img src="/upload/headicon/600055.png?t=0.5602230597622924" alt="">\n' +
+		            '		<img class="gif" src="../img/scall.gif" alt="">\n' +
+		            '		<div class="message"> 8888888888888888888888888888888888888888888888888</div>\n' +
+		            ' 		<div class="corner"></div>' +
+		            '</div>';
+        wrap.append(com);
+    }
+    reportState($('body'));
+</script>
+</body>
+</html>

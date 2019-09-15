@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.min.js"></script>
+    <script src="jquery.easyui-1.5.1.min.js"></script>
+    <link rel="stylesheet" href="../icon/iconfont.css">
+    <link rel="stylesheet" href="themes/insdep/easyui.css">
+    <style>
+        * {
+            font-family: "Microsoft YaHei", "微软雅黑";
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            list-style: none;
+        }
+        body {
+            overflow: hidden;
+        }
+        .icon {
+            font-family: iconfont;
+        }
+        .clearfix:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+        .video-task {
+            position: absolute;
+            right: 58px;
+            top: 4px;
+            width: 348px;
+            height: 234px;
+            background-color: rgba(0,0,0,0.85);
+            border-radius: 3px;
+            color: white;
+            padding: 6px 3px 3px 3px;
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+        }
+
+        .video-task>.top-bar {
+            padding-top: 3px;
+            margin-bottom: 3px;
+            padding-left: 6px;
+            padding-right: 6px;
+            position: relative;
+        }
+        .video-task>.top-bar>div {
+            z-index: 1;
+        }
+        .video-task>.top-bar .float-right {
+            height: 18px;
+            width: 18px;
+            line-height: 19px;
+            margin-bottom: 6px;
+            border-radius: 2px;
+            margin-left: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+        }
+        .video-task>.top-bar .times {
+            float: right;
+            width: 80px;
+            height: 18px;
+            background-color: #121212;
+            border: 1px solid #666666;
+            border-radius: 2px;
+            margin-right: 10px;
+        }
+        .video-task>.top-bar .times div {
+            float: left;
+            font-size: 12px;
+            text-align: center;
+            width: 26px;
+            height: 18px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .video-task>.top-bar .times div.active {
+            background-color: #5d5d5d;
+        }
+        .video-task>.top-bar .float-right:active {
+            opacity: .9;
+        }
+        .video-task>.top-bar>.close {
+            background-color: #f45454;
+        }
+        .video-task>.top-bar>.full-screen {
+            background-color: #4eab2e;
+        }
+        .video-task>.top-bar>.minimum {
+            background-color: #2585cb;
+        }
+        .video-task>.top-bar>.close:hover {
+            background-color: #f4291e;
+        }
+        .video-task>.top-bar>.full-screen:hover {
+            background-color: #2d950f;
+        }
+        .video-task>.top-bar>.minimum:hover {
+            background-color: #2772cb;
+        }
+        .video-task>.top-bar .float-left {
+            padding-top: 3px;
+            font-size: 12px;
+        }
+        .video-task>ul {
+            width: 342px;
+            height: 195px;
+            position: relative;
+        }
+        .video-task>ul>li {
+            height: 100%;
+            width: 100%;
+            border-radius: 2px;
+            padding: 3px;
+            float: right;
+            position: relative;
+            background-color: black;
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+        }
+        .video-task>ul>li.active {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: -12px;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 10;
+        }
+        .video-task>ul:active {
+            cursor: move;
+        }
+        .video-task>ul>li>.video-name {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 12px;
+            line-height: 12px;
+        }
+        .video-task>ul>li>video {
+            width: 100%;
+            height: 100%;
+        }
+        .video-task>ul>li>.close {
+            font-family: iconfont;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 1;
+        }
+        .video-task>ul>li>.full {
+            display: none;
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            z-index: 1;
+        }
+        .video-task>ul>li>.mini {
+            display: none;
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            z-index: 1;
+        }
+        .video-task>ul>li .video-info {
+            font-size: 12px;
+            position: absolute;
+            bottom: 5px;
+            z-index: 1;
+        }
+        .video-task>ul>li .video-info span {
+            cursor: pointer;
+            margin-left: 2px;
+        }
+        .video-task>ul>li .video-info .btn:hover {
+            opacity: .8;
+        }
+        .video-task>ul>li>.video {
+            width: 100%;
+            height: 100%;
+            background-color: red;
+        }
+        .video-task>ul>li .construct {
+            font-family: iconfont;
+            position: absolute;
+            color: white;
+            cursor: pointer;
+            bottom: 5px;
+            right: 27px;
+            z-index: 1;
+        }
+        .video-task>ul>li .construct:hover {
+            opacity: .8;
+        }
+        .video-task>ul>li>.full.active {
+            display: block;
+        }
+        .video-task>ul>li>.mini.active {
+            display: block;
+        }
+        .video-task>ul>li>.icon:hover {
+            opacity: .8;
+        }
+        .video-task>ul>li>.close:hover {
+            opacity: .8;
+        }
+
+		/*5-8个调用*/
+        .video-task.type2>ul>li:nth-child(1){
+            width: 75% !important;
+            height: 74.99% !important;
+        }
+		/*9-13个调用*/
+        .video-task.type3>ul>li:nth-child(2){
+            width: 50% !important;
+            height: 49.99% !important;
+        }
+
+        .video-task.type3>ul>li:nth-child(4){
+            position: absolute;
+            right: 0;
+            bottom: 50%;
+        }
+
+        .video-task-wrap>.video-gif {
+            display: none;
+            position: absolute;
+            right: 58px;
+            top: 5px;
+            width: 40px;
+            height: 40px;
+            border-radius: 2px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .video-task-wrap>.video-gif.active {
+            display: block;
+        }
+        .video-task-wrap>.video-gif:hover {
+            opacity: .9;
+        }
+        .video-task-wrap>.video-gif>img {
+            width: 40px;
+            height: 40px;
+        }
+		/*全屏*/
+        .video-task.full-active {
+            width: 100% !important;
+            height: 100% !important;
+            top: 0!important;
+            left: 0!important;
+        }
+        .video-task.full-active>ul {
+            width: 100% !important;
+            height: 95% !important;
+        }
+    </style>
+</head>
+<body>
+<div class="video-task-wrap">
+    <div class="video-task">
+        <div class="top-bar clearfix">
+            <div class="float-right close icon">&#xe6c4</div>
+            <div class="float-right full-screen icon">&#xe6c5</div>
+            <div class="float-right minimum icon">&#xe6c3</div>
+            <div class="float-left icon">&#xe62d 视频调用</div>
+            <div class="times">
+                <div class="active">x1</div>
+                <div>x2</div>
+                <div>x4</div>
+            </div>
+        </div>
+        <ul>
+            <li>
+                <div class="video-name">fsda</div>
+                <div class="close">&#xe689</div>
+                <div class="icon full active">&#xe69b</div>
+                <div class="construct">&#xe655</div>
+                <div class="icon mini">&#xe698</div>
+                <div class="video-info">
+                    <div>帧率</div>
+                    <div>码率</div>
+                    <div>分辨率
+                        <span>64564</span>
+                        <span class="btn">+</span>
+                        <span class="btn">-</span>
+                    </div>
+                </div>
+                <video src=""></video>
+            </li>
+
+            <li>
+                <div class="video-name">aaaa</div>
+                <div class="close">&#xe689</div>
+                <div class="icon full active">&#xe69b</div>
+                <div class="icon mini">&#xe698</div>
+                <div class="video"></div>
+            </li>
+            <li>
+                <div class="video-name">aaaa</div>
+                <div class="close">&#xe689</div>
+                <div class="icon full active">&#xe69b</div>
+                <div class="icon mini">&#xe698</div>
+                <div class="video"></div>
+            </li>
+        </ul>
+        <div class="drag-window"></div>
+    </div>
+    <div class="video-gif">
+        <img src="./src/img/video.gif" alt="">
+    </div>
+</div>
+
+<button>adkjhasd</button>
+<script>
+
+    var videoTask = {
+        startIndex: 0,
+        endIndex: 0,
+        clientWidth: document.documentElement.clientWidth,
+        clientHeight: document.documentElement.clientHeight,
+        preWidth: $('.video-task').width(),
+        preHeight: $('.video-task').height(),
+        init: function () {
+            this.minimum();               //缩小
+            this.videoTaskType();         //根据调用视频的数目判断窗口的大小
+            this.screenFullMin();         //调用窗口全屏还原
+            this.closeVideoTask();        //关闭视频调用
+            this.closeOneVideo();         //关闭单个视频
+            this.oneVideoFullScreen();    //单个视频全屏
+            this.videoDrag();             //视频拖拽
+            this.changeTimes();           //视频大小倍数
+        },
+        minimum: function () {
+            $('.video-task-wrap .video-task .top-bar .minimum').on('click', function () {
+                $('.video-task-wrap .video-task').fadeOut(function () {
+                    $('.video-task-wrap .video-gif').addClass('active');
+                });
+            });
+            $('.video-task-wrap .video-gif').on('click', function () {
+                $('.video-task-wrap .video-gif').removeClass('active');
+                $('.video-task-wrap .video-task').fadeIn();
+            });
+        },
+        videoTaskType: function () {
+            var videoLength = $('.video-task>ul>li').length;
+            $('.video-task').removeClass('type2');
+            $('.video-task').removeClass('type3');
+            if (1 < videoLength && videoLength <= 4) {
+                this.taskSize(690,432,"50%","50%")
+            } else if (4 < videoLength && videoLength <= 8) {
+                this.taskSize(690,432,"25%","25%");
+                $('.video-task').addClass('type2');
+            } else if (8 < videoLength && videoLength <= 13) {
+                this.taskSize(690,432,"25%","25%");
+                $('.video-task').addClass('type3')
+            } else if (13 < videoLength && videoLength <= 16) {
+                this.taskSize(690,432,"25%","25%");
+            } else if (16 < videoLength && videoLength <= 25) {
+                this.taskSize(861,531,"20%","20%");
+            } else if (25 < videoLength) {
+                this.taskSize(1032,630,"16.66%","16.66%");
+            } else if (videoLength === 1) {
+                this.taskSize(348,234,"100%","100%");
+            }
+            this.preWidth = $('.video-task').width() + 6;
+            this.preHeight = $('.video-task').height() + 9;
+        },
+        screenFullMin: function () {
+            var _this = this;
+            $('.video-task>.top-bar>.full-screen').on('click', function () {
+                if(!$('.video-task>.top-bar>.full-screen').hasClass('active')){
+                    _this.fullScreen()
+                }else{
+                    _this.restore()
+                }
+                console.log(this.preWidth)
+            });
+        },
+        closeVideoTask: function () {
+            $('.video-task>.top-bar>.close').on('click', function () {
+                $('.video-task').css('display', 'none');
+            });
+        },
+        oneVideoFullScreen: function () {
+            $('.video-task>ul>li>.icon').on('click', function () {
+                if($(this).parent().find('.full').hasClass('active')){
+                    $(this).removeClass('active');
+                    $(this).parent().addClass('active');
+                    $(this).parent().find('.mini').addClass('active')
+                }else{
+                    $(this).removeClass('active');
+                    $(this).parent().removeClass('active');
+                    $(this).parent().find('.full').addClass('active')
+                }
+            });
+        },
+        closeOneVideo: function () {
+            var _this = this;
+            $('.video-task>ul>li>.close').on('click', function () {
+                $(this).parent().remove();
+                _this.videoTaskType();
+            });
+        },
+        fullScreen: function () {
+            $('.video-task>.top-bar>.full-screen').html("&#xe6c6");
+            $('.video-task>.top-bar>.full-screen').addClass('active');
+            $('.video-task').addClass('full-active');
+        },
+        restore: function () {
+            $('.video-task>.top-bar>.full-screen').html("&#xe6c5");
+            $('.video-task>.top-bar>.full-screen').removeClass('active');
+            $('.video-task').removeClass('full-active');
+        },
+        videoDrag: function () {
+            var _this = this;
+            $('.video-task>ul>li').on('mousedown', function () {
+                _this.startIndex = $(this).index();
+            });
+            $('.video-task>ul>li').on('mouseup', function () {
+                _this.endIndex = $(this).index();
+                var $startLi = $('.video-task>ul>li').eq(_this.startIndex);
+                $('.video-task>ul>li').eq(_this.endIndex).after($startLi);
+                $('.video-task>ul>li').eq(_this.startIndex).after($(this));
+            });
+        },
+        changeTimes: function () {
+            var _this = this;
+            $('.video-task>.top-bar .times div').on('click', function () {
+                if(!$('.video-task').hasClass('full-active')){
+                    _this.clientWidth = document.documentElement.clientWidth;
+                    _this.clientHeight = document.documentElement.clientHeight;
+                    switch ($(this).text()){
+                        case "x1":
+                            _this.taskSize(_this.preWidth, _this.preHeight);
+                            $('.video-task>.top-bar .times div').removeClass('active');
+                            $(this).addClass('active');
+                            break;
+                        case "x2":
+                            if((2*_this.preWidth < _this.clientWidth) && (2*_this.preHeight<_this.clientHeight)){
+                                _this.taskSize(2*_this.preWidth, 2*_this.preHeight);
+                                $('.video-task>.top-bar .times div').removeClass('active');
+                                $(this).addClass('active');
+                            }else{
+                                alert('当前倍数已超出显示器分辨率')
+                            }
+                            break;
+                        case "x4":
+                            if((4*_this.preWidth < _this.clientWidth) && (4*_this.preHeight<_this.clientHeight)){
+                                _this.taskSize(4*_this.preWidth, 4*_this.preHeight);
+                                $('.video-task>.top-bar .times div').removeClass('active');
+                                $(this).addClass('active');
+                            }else{
+                                alert('当前倍数已超出显示器分辨率')
+                            }
+                            break;
+                    }
+                }
+            })
+        },
+        taskSize: function (taskWidth, taskHeight, liWidth, liHeight) {
+            $('.video-task').css({width: taskWidth, height: taskHeight});
+            $('.video-task>ul').css({width: taskWidth-6, height: taskHeight-39});
+            if(liWidth){
+                $('.video-task>ul>li').css({width: liWidth, height: liHeight});
+            }
+        }
+    };
+    videoTask.init();
+    $('button').on('click', function () {
+        $('.video-task>ul').append('<li>\n' +
+            '                <div class="video-name">aaaa</div>\n' +
+            '                <div class="close">&#xe689</div>\n' +
+            '                <div class="icon full active">&#xe69b</div>\n' +
+            '                <div class="icon mini">&#xe698</div>\n' +
+            '                <div class="video"></div>\n' +
+            '            </li>');
+        videoTask.videoTaskType();
+        videoTask.videoDrag();
+        videoTask.closeOneVideo()
+    });
+
+	//鼠标拖动效果
+    $('.video-task .top-bar').mousedown(function (event) {
+        if (!$('.video-task').hasClass('full-active')) {
+            var isMove = true;
+            var abs_x = event.pageX - $('.video-task').offset().left;
+            var abs_y = event.pageY - $('.video-task').offset().top;
+            $(document).mousemove(function (event) {
+                if (isMove) {
+                    $('.video-task').css({
+                        'right': document.documentElement.clientWidth - $('.video-task').width() - (event.pageX - abs_x),
+                        'top': event.pageY - abs_y,
+                        'transform': 'translate(0, 0)'
+                    });
+                }
+            }).mouseup(function () {
+                isMove = false;
+            });
+        }
+    });
+</script>
+</body>
+</html>

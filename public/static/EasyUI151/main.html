@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<!-- EasyUI相关JS包 -->
+<script src="jquery.min.js" type="text/javascript"></script>
+
+<script>
+$(function() {
+	$("#btn1").click(function(){
+	    $('#main').load('test1.html');
+	});
+	$("#btn2").click(function(){
+	    $('#main').load('test2.html');
+	});
+	$("#btn3").click(function(){
+	    $('#main').load('test3.html');
+	});
+});
+</script>
+<title>多媒体综合指挥调度平台 V1.2【主界面】</title>
+</head>
+<body>
+		<div id="main" data-options="region:'center',split:false,border:false">
+		</div>
+		<div id="title" data-options="region:'north',split:false,border:false" style="height:100px;">
+			<a id="btn1" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">load1</a>  
+			<a id="btn2" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">load2</a>  
+			<a id="btn3" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">load3</a>  
+		</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        img {
+            -webkit-filter: grayscale(100%);
+            -moz-filter: grayscale(100%);
+            -ms-filter: grayscale(100%);
+            -o-filter: grayscale(100%);
+            filter: grayscale(100%);
+            filter: gray;
+        }
+    </style>
+</head>
+<body>
+<img id="gray" class="imgToGray" src="./1.png" alt="">
+<img id="gray" class="imgToGray" src="./2.jpg" alt="">
+<script src="./grayscale.js"></script>
+<script>
+    grayscale($('.imgToGray'));
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.min.js"></script>
+    <link rel="stylesheet" href="themes/insdep/easyui.css">
+    <style>
+        .group-calling-people {
+            position: absolute;
+            left: 50%;
+            bottom: 25px;
+            transform: translate(-50%, 0);
+            width: 240px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: rgba(1,16,25,0.85);
+            color: white;
+        }
+        .group-calling-people>.img-wrap {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-top: 1px;
+            margin-left: 1px;
+            background: white;
+        }
+        .group-calling-people>.img-wrap>img {
+            width: 32px;
+            height: 32px;
+            margin: 8px;
+        }
+        .group-calling-people>.float-left>.people {
+            font-size: 16px;
+            line-height: 20px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            text-align: center;
+            width: 160px;
+        }
+        .group-calling-people>.float-left>.group {
+            font-size: 12px;
+            text-align: center;
+            width: 160px;
+        }
+    </style>
+</head>
+<body>
+<!--<div class="group-calling-people">-->
+    <!--<div class="img-wrap float-left">-->
+        <!--<img src="" alt="">-->
+    <!--</div>-->
+    <!--<div class="float-left">-->
+        <!--<div class="people">手机袋</div>-->
+        <!--<div class="group">阿打算就小组</div>-->
+    <!--</div>-->
+<!--</div>-->
+<script>
+    function startCall(people, group) {
+        var content = '<div class="group-calling-people">\n' +
+            '    <div class="img-wrap float-left">\n' +
+            '        <img src="/upload/headicon/600050.png" alt="">\n' +
+            '    </div>\n' +
+            '    <div class="float-left">\n' +
+            '        <div class="people">'+people+'</div>\n' +
+            '        <div class="group">'+group+'</div>\n' +
+            '    </div>\n' +
+            '</div>';
+        $('body').append(content);
+        $('.group-calling-people').fadeIn()
+    }
+    function stopCall() {
+        $('.group-calling-people').fadeOut(function () {
+            $('.group-calling-people').remove()
+        })
+    }
+    startCall('【600001】张三','【6000020】测试组1');
+</script>
+</body>
+</html>

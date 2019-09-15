@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jQuery Easy UI</title>
+    <meta charset="UTF-8"/>
+    <script src="jquery.min.js"></script>
+    <script src="jquery.easyui-1.5.1.min.js"></script>
+    <link rel="stylesheet" href="../icon/iconfont.css">
+    <link rel="stylesheet" href="themes/insdep/easyui.css">
+    <link rel="stylesheet" href="themes/insdep/icon.css">
+    <link rel="stylesheet" href="themes/insdep/iconfont/demo.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            color: #4d4d4d;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "微软雅黑";
+        }
+
+        html {
+            padding: 50px;
+            background-color: #e5e5e5;
+            overflow: hidden;
+        }
+
+        .icon {
+            font-family: iconfont !important;
+        }
+
+        .clearfix::after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        input:focus {
+            box-shadow: 0 0 5px rgba(37, 133, 203, 0.5);
+        }
+
+        textarea:focus {
+            box-shadow: 0 0 5px hsla(205, 69%, 47%, 0.5);
+        }
+
+        .checkboxWrap label {
+            cursor: pointer;
+            display: inline-block;
+            right: 10px;
+            margin-right: 2px;
+        }
+
+        .checkboxWrap label span {
+            vertical-align: middle;
+        }
+
+        .checkbox {
+            display: none;
+        }
+
+        .checkSpan {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #fff;
+            border: 1px solid #7f9abc;
+        }
+
+        .checkSpan:hover {
+            border: 1px solid rgba(11, 78, 126, 1);
+        }
+
+        .checkbox:checked + .checkSpan:after {
+            content: '';
+            display: inline-block;
+            position: relative;
+            width: 9px;
+            height: 4px;
+            border: 2px solid #ffffff;
+            border-bottom: none;
+            border-left: none;
+            transform: rotate(130deg);
+            margin-bottom: 13px;
+            vertical-align: middle;
+            top: 2px;
+            left: 2px;
+        }
+
+        .checkbox:checked + .checkSpan {
+            background-color: rgba(22, 107, 168, 1);
+        }
+
+
+        /*消息弹出框-------------------
+       ----------------*/
+        #popWrap .message {
+            opacity: 0;
+            width: 0;
+            height: 40px;
+            border-radius: 20px;
+            background: #011019;
+            margin-bottom: 6px;
+            position: absolute;
+            right: 0;
+        }
+
+        #popWrap .message:hover {
+            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        #popWrap .message tr {
+            height: 40px;
+        }
+
+        #popWrap .message tr div {
+            color: #fafafa;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        #popWrap .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            font-size: 20px;
+            background-color: #49714a;
+            position: relative;
+            color: white;
+        }
+
+        #popWrap .icon .count {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #dc0109;
+            font-size: 12px;
+            text-align: center;
+            line-height: 15px;
+            color: white;
+            top: 0;
+            right: -3px;
+            position: absolute;
+        }
+
+        #popWrap .icon.video {
+            background-color: #496999;
+        }
+
+        #popWrap .icon.voiceCall {
+            background-color: #8ab66d;
+        }
+
+        #popWrap .message td:nth-child(2) {
+            width: 155px;
+            padding-left: 16px;
+        }
+
+        #popWrap .message td:nth-child(2) div {
+        	max-width: 140px;
+            line-height: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #popWrap .message .button {
+            width: 54px;
+            height: 24px;
+            border-radius: 3px;
+            margin-top: 3px;
+            text-align: center;
+            line-height: 24px;
+            cursor: pointer;
+        }
+
+        #popWrap .message td:nth-child(3) {
+            width: 60px;
+        }
+
+        #popWrap .message td:nth-child(4) {
+            width: 60px;
+        }
+
+        #popWrap .message td:nth-child(3) div {
+            background-color: #da433c;
+        }
+
+        #popWrap .message td:nth-child(3) div:hover {
+            background-color: #e27975;
+        }
+
+        #popWrap .message td:nth-child(4) div {
+            background-color: #52ba3b;
+        }
+
+        #popWrap .message td:nth-child(4) div:hover {
+            background-color: #96c883;
+        }
+
+        #popWrap .message td:nth-child(5) div {
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        #popWrap .message td:nth-child(5) div:hover {
+            text-shadow: 0 0 3px #ffffff;
+        }
+
+        #popWrap .messageWrap {
+            bottom: 45px;
+        }
+
+        #popWrap .videoWrap {
+            bottom: 0;
+        }
+
+        #popWrap .voiceWrap {
+            bottom: 90px;
+        }
+        #popWrap {
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            width: 335px;
+            height: 140px;
+        }
+        #popWrap>div {
+            position: absolute;
+            right: 0;
+            width: 335px;
+            height: 45px;
+        }
+        #popWrap .fix {
+            position: absolute;
+            right: 3px;
+            display: none;
+            cursor: pointer;
+        }
+        #popWrap .fix:hover {
+            opacity: 0.85;
+        }
+        #popWrap .fix.active {
+            display: block;
+        }
+        button {
+            margin-left: 500px;
+        }
+    </style>
+</head>
+<body>
+
+<!--a-->
+<div id="popWrap">
+
+</div>
+<button id="btn_msg">及时消息</button>
+<button id="btn_voice">语音呼叫</button>
+<button id="btn_video">视频呼叫</button>
+
+<script>
+    //消息弹框-----------------------------
+   $(function () {
+       var messageCount = 0;
+       var voiceCount = 0;
+       var videoCount = 0;
+       var haveClick = true;
+       appendMessageWrap();
+       function messagePop(type, name) {
+           var icon,count;
+           var typeIcon = null;
+           var operate = '接听';
+           var refuse = '<div class="button refuse">拒绝</div>';
+           var wrap = $('.messageWrap');
+           if (type === 'video') {
+               icon = '&#xe64c';
+               typeIcon = 'video';
+               wrap = $('.videoWrap');
+               videoCount +=1;
+               count = videoCount;
+               $("#popWrap .videoWrap .fix .count").html(videoCount);
+           } else if (type === 'voice') {
+               icon = '&#xe628';
+               typeIcon = 'voiceCall';
+               wrap = $('.voiceWrap');
+               voiceCount += 1;
+               count = voiceCount;
+               $("#popWrap .voiceWrap .fix .count").html(voiceCount);
+           } else {
+               icon = '&#xe7a8';
+               operate = '回复';
+               refuse = '';
+               messageCount += 1;
+               count = messageCount;
+               $("#popWrap .messageWrap .fix .count").html(messageCount);
+           }
+           var content = '<div class="message">\n' +
+               '        <table>\n' +
+               '            <tr>\n' +
+               '                <td>' +
+               '                   <div class="icon ' + typeIcon + '">' + icon + '' +
+               '                       <div class="count">' + count + '</div>' +
+               '                   </div>' +
+               '                </td>\n' +
+               '                <td>\n' +
+               '                    <div style="font-size: 15px">' + name + '</div>\n' +
+               //             '                    <div style="font-size: 12px">' + type + '</div>\n' +
+               '                </td>\n' +
+               '                <td>\n' +
+               '                    ' + refuse + '\n' +
+               '                </td>\n' +
+               '                <td>\n' +
+               '                    <div class="button">' + operate + '</div>\n' +
+               '                </td>\n' +
+               '                <td>\n' +
+               '                    <div class="close">×</div>\n' +
+               '                </td>\n' +
+               '            </tr>\n' +
+               '        </table>\n' +
+               '    </div>\n';
+           wrap.find('.fix').removeClass('active');
+           wrap.find('.message').remove();
+           wrap.append(content);
+           bindClose(type, wrap);
+           bindHover(type, wrap);
+           $('.message').animate({width: '333px', opacity: 0.85}, function () {
+               if(type === "message"){
+                   setTimeout(function () {
+                       if (!$('#popWrap .messageWrap .message').hasClass('active')) {
+                           $('#popWrap .messageWrap .message').animate({
+                               width: 43
+                           }, function () {
+                               $('#popWrap .messageWrap .message').css('display', 'none');
+                               $('#popWrap .messageWrap .message').parent().find('.fix').addClass('active')
+                           });
+                       }
+                   }, 40000000)
+               }else{
+                   return
+               }
+           });
+       }
+
+       $('#btn_msg').on('click', function () {
+           messagePop('message', '测试即时消息来到。测试即时消息来到。测试即时消息来到。测试即时消息来到。测试即时消息来到。测试即时消息来到。测试即时消息来到。测试即时消息来到。测试即时消息来到。测试即时消息来到。测试即时消息来到。');
+       });
+       $('#btn_voice').on('click', function () {
+           messagePop('voice', '测试语音呼叫进入');
+       });
+       $('#btn_video').on('click', function () {
+           messagePop('video', '测试视频呼叫进入');
+       });
+       function appendMessageWrap() {
+           var messageWrap = '<div class="voiceWrap">\n' +
+               '        <div class="fix icon voiceCall">&#xe628\n' +
+               '            <div class="count">1</div>\n' +
+               '        </div>\n' +
+               '    </div>\n' +
+               '    <div class="videoWrap">\n' +
+               '        <div class="fix icon video">&#xe64c\n' +
+               '            <div class="count">1</div>\n' +
+               '        </div>\n' +
+               '    </div>\n' +
+               '    <div class="messageWrap">\n' +
+               '        <div class="fix icon">&#xe7a8\n' +
+               '            <div class="count">1</div>\n' +
+               '        </div>\n' +
+               '    </div>';
+           $('#popWrap').append(messageWrap)
+       }
+       function bindClose(type, wrap) {
+           wrap.find('.message .close').on('click', function () {
+               haveClick = false;
+               $(this).parent().parent().parent().parent().parent().fadeOut(100,function () {
+                   $(this).remove();
+                   haveClick = true
+               });
+               if(type === "video"){
+                   videoCount = 0;
+               }else if(type === "voice"){
+                   voiceCount = 0
+               }else {
+                   messageCount = 0
+               }
+           });
+           wrap.find('.message .button').on('click', function () {
+               haveClick = false;
+               $(this).parent().parent().parent().parent().parent().fadeOut(100,function () {
+                   $(this).remove();
+                   haveClick = true
+               })
+           })
+       }
+
+       function bindHover(type, wrap) {
+           wrap.find('.message').hover(function () {
+               if(haveClick){
+                   $(this).addClass('active');
+               }
+           }, function () {
+               if(type === 'message' && haveClick){
+                   var _this = $(this);
+                   setTimeout(function () {
+                       _this.removeClass('active');
+                       _this.fadeOut(200,function () {
+                           _this.remove();
+                           wrap.find('.fix').addClass('active');
+                       })
+                   }, 1500)
+               }
+           });
+       }
+   })
+</script>
+</body>
+</html>

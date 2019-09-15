@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>http get demo</title>
+    <script type="text/javascript" src="static/comm/jquery-1.11.3.min.js"></script>
+    <style>
+        .datalist {
+            list-style: none;
+            padding-inline-start: 0;
+            display: inline-flex;
+        }
+        .datalist li {
+            width: 100px;
+            border: solid 1px;
+            margin-right: 10px;
+            padding: 5px 5px;
+        }
+        .datalist li>.id {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="content">
+<ul class="datalist"></ul>
+</div>
+</body>
+<script>
+    $.ajax({
+        type: "get",
+        url: "/api/system/test",
+        dataType: "json",
+        success: function(data){
+            // console.log(data);
+            var listObj = $('.datalist');
+            data.data.forEach((item)=>{
+                listObj.append(`<li><div class="id">${item.id}</div><div>${item.name}</div><div>${item.score}</div></li>`)
+            })
+        }
+    });
+</script>
+</html>

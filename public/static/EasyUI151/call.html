@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.min.js"></script>
+    <link rel="stylesheet" href="../icon/iconfont.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .icon {
+            font-family: iconfont;
+        }
+		/*查看调度台视频请求*/
+        .video-request {
+            width: 420px;
+            height: 220px;
+            border-radius: 2px;
+            font-size: 13px;
+            background-color: rgba(77,77,77,.9);
+            color: white;
+            position: absolute;
+            bottom: 20px!important;
+            left: 50%;
+            transform: translate(-50%, 0);
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            user-select: none;
+        }
+        .video-request.full-active {
+            width: 100%!important;
+            height: 100%!important;
+            top: 0!important;
+            left: 0!important;
+             transform: translate(0, 0);
+        }
+        .video-request .header {
+            font-size: 12px;
+            position: absolute;
+            top: 12px;
+            left: 14px;
+        }
+        .video-request .zoom {
+            position: absolute;
+            top: 10px;
+            right: 6px;
+            width: 20px;
+            height: 20px;
+            z-index: 1;
+        }
+        .video-request .zoom>div {
+            cursor: pointer;
+        }
+        .video-request .zoom>div:hover {
+            opacity: .8;
+        }
+        .video-request .zoom .less-window {
+            display: none;
+        }
+        .video-request .handle {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translate(-50%,0);
+            z-index: 1;
+        }
+        .video-request .handle .icon {
+            float: left;
+            width: 34px;
+            height: 34px;
+            text-align: center;
+            line-height: 34px;
+            margin-left: 30px;
+            margin-right: 30px;
+            background-color: #ed464c;
+            border-radius: 50%;
+            font-size: 17px;
+            cursor: pointer;
+        }
+        .video-request .handle .icon.answer {
+            background-color: #4aa32c;
+            transform: rotate(-135deg);
+        }
+        .video-request .handle .icon.answer:hover {
+            background-color: #339e14;
+        }
+        .video-request .handle .icon:hover {
+            background-color: #d94a4a;
+        }
+        .video-request .handle .icon:active {
+            background-color: #da5b5b;
+        }
+        .video-request .answered {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translate(-50%,0);
+            z-index: 1;
+            display: none;
+        }
+        .video-request .answered .time {
+            margin-bottom: 5px;
+        }
+        .video-request .answered .icon {
+            width: 34px;
+            height: 34px;
+            text-align: center;
+            line-height: 34px;
+            background-color: #ed464c;
+            border-radius: 50%;
+            font-size: 17px;
+            cursor: pointer;
+        }
+        .video-request .answered .icon:hover {
+            background-color: #d94a4a;
+        }
+        .video-request .answered .icon:active {
+            background-color: #da5b5b;
+        }
+        .video-request>.video-wrap {
+        	width: 100%;
+        	height: 100%;
+        }
+        .video-request>.video-wrap>video {
+        	width: 100%;
+        	height: 100%;
+        }
+    </style>
+</head>
+<body>
+	<div class="video-request">
+	    <div class="header icon">
+	        &#xe62d 视频查看 · <span>三号维修员</span>
+	    </div>
+	    <div class="zoom">
+	        <div class="icon all-window" title="全屏">&#xe69b</div>
+	        <div class="icon less-window" title="缩小">&#xe698</div>
+	    </div>
+	    <div class="handle">
+	        <div class="icon answer" title="接听">&#xe659</div>
+	        <div class="icon" title="挂断">&#xe659</div>
+	    </div>
+	    <div class="answered">
+	        <div class="time">15:78</div>
+	        <div class="icon" title="挂断">&#xe659</div>
+	    </div>
+	    <div class="video-wrap"></div>
+	</div>
+</body>
+<script>
+    $('.video-request>.handle>.answer').on('click', function () {
+        $(this).parent().css('display', 'none');
+        $('.video-request>.answered').css('display', 'block');
+    });
+    function fullScreenOrMin(wrap) {
+        wrap.find(' .zoom>div').on('click', function () {
+            if(wrap.find('.all-window').css('display') === 'block'){
+                wrap.find('.all-window').css('display', 'none');
+                wrap.find('.less-window').css('display', 'block');
+                wrap.addClass('full-active');
+            }else {
+                wrap.find('.less-window').css('display', 'none');
+                wrap.find('.all-window').css('display', 'block');
+                wrap.removeClass('full-active');
+            }
+        });
+    }
+    function bindMove(wrap) {
+        wrap.find('.video-wrap').mousedown(function (event) {
+            var isMove = true;
+            var abs_x = event.pageX - wrap.offset().left;
+            var abs_y = event.pageY - wrap.offset().top;
+            $(document).mousemove(function (event) {
+                if (isMove) {
+                    wrap.css({
+                        'left': event.pageX - abs_x + 220,
+                        'top': event.pageY - abs_y,
+                        'margin-left':0
+                    });
+                }
+            }).mouseup(function () {
+                isMove = false;
+            });
+        });
+    }
+    fullScreenOrMin($('.video-request'));
+    bindMove($('.video-request'));
+</script>
+</html>

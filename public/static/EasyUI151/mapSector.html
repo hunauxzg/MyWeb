@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body,
+        html,
+        #allmap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+    <script type="text/JavaScript" src="http://api.map.baidu.com/api?v=3.0&ak=5cmZ1GRfgYHiXDymUo7AC4FDOvBl0cK0"></script>
+    <title>添加扇形</title>
+</head>
+<body>
+    <div id="allmap"></div>
+</body>
+<script type="text/javascript">
+    var map = new BMap.Map("allmap");
+    var pointCenter = new BMap.Point(120.1965, 30.22975);
+    map.centerAndZoom(pointCenter, 19);
+    map.enableScrollWheelZoom(true);
+
+    // 自定义扇形覆盖物
+    function SectorLayer(center, radius, startAngle, endAngle, color, opacity) {
+        this._center = center;// 点
+        this._radius = radius;// 半径
+        this._color = color;  // 颜色
+        this._startAngle = startAngle;// 起始角度
+        this._endAngle = endAngle;    // 结束角度
+        this._opacity = opacity;      // 透明度
+    }
+
+    // 继承百度地图覆盖物
+    SectorLayer.prototype = new BMap.Overlay();
+
+    // 初始化
+    SectorLayer.prototype.initialize = function (map) {
+        this._map = map;
+
+        var canvas = document.createElement("canvas"); // 创建Cavans对象
+        canvas.setAttribute("width",String(this._radius*2));// 不能用canvas.style.width,会拉变形
+        canvas.setAttribute("height",String(this._radius*2));
+        canvas.style.zIndex = BMap.Overlay.getZIndex(this._center.lat);
+        canvas.style.position = "absolute";
+        canvas.style.background = "translate";
+        canvas.style.opacity = this._opacity;
+
+        var ctx = canvas.getContext('2d');
+        ctx.lineWidth = 1;
+        ctx.fillStyle = this._color; //填充色彩
+        ctx.strokeStyle = "red";//设置边颜色
+        ctx.beginPath();
+        ctx.translate(this._radius, this._radius);
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, this._radius, this._startAngle / 180 * Math.PI, this._endAngle / 180 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
+
+        map.getPanes().markerPane.appendChild(canvas);
+        this._canvas = canvas;
+        return canvas;
+    }
+
+    SectorLayer.prototype.draw = function () {
+        var map = this._map;
+        var pixel = map.pointToOverlayPixel(this._center);
+        this._canvas.style.left = pixel.x - this._radius + "px";
+        this._canvas.style.top = pixel.y - this._radius + "px";
+    }
+
+    // 随便画了7*（360/30）个扇形，地图放到最大级别，不同半径、不同角度下的效果
+    var colorsArray = ["red", "#8B008B", "green", " #FFFAAA", "FF66DD", "#CCDD33", "#FFAAAA", "orange", "#FF3300", "blue","#AAA321", "#63B8FF", "#8B6508"];
+    var step = 30;//每个扇形30度
+    for(var startAngle = 0; startAngle <= 360; startAngle +=step)
+    {
+        var chooseColor = Math.ceil(Math.random() * 10) % (colorsArray.length - 1);
+        var sector = new SectorLayer(pointCenter, 250, startAngle, startAngle + step, colorsArray[chooseColor], 0.1);
+        map.addOverlay(sector);
+        var sector = new SectorLayer(pointCenter, 200, startAngle, startAngle + step, colorsArray[chooseColor], 0.2);
+        map.addOverlay(sector);
+        var sector = new SectorLayer(pointCenter, 160, startAngle, startAngle + step, colorsArray[chooseColor], 0.3);
+        map.addOverlay(sector);
+        var sector = new SectorLayer(pointCenter, 80, startAngle, startAngle + step, colorsArray[chooseColor], 0.7);
+        map.addOverlay(sector);
+        var sector = new SectorLayer(pointCenter, 40, startAngle, startAngle + step, colorsArray[chooseColor], 0.9);
+        map.addOverlay(sector);
+        var sector = new SectorLayer(pointCenter, 20, startAngle, startAngle + step, colorsArray[chooseColor], 1);
+        map.addOverlay(sector);
+        var sector = new SectorLayer(pointCenter, 10, startAngle, startAngle + step, colorsArray[chooseColor], 1);
+        map.addOverlay(sector);
+    }
+</script>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>IDT 综合数字调度系统客户端【主界面】</title>
+    <script src="../3rd/json.js"></script>
+    <!--[if !IE]><!--> <script src="./3rd/adapter.js"></script> <!--<![endif]-->
+    <script src="IdtApiAll.js"></script>
+    <script src="IdtConst.js"></script>
+    <script src="MicDetect.js"></script>
+    
+    <!-- <script src="./idt/PUtility.js"></script> -->
+    <!-- <script src="./idt/IdtConst.js"></script> -->
+    <!-- <script src="./idt/WsLink.js"></script> -->
+    <!-- <script src="./idt/FsmMgr.js"></script> -->
+    <!-- <script src="./idt/Trans.js"></script> -->
+    <!-- <script src="./idt/Subs.js"></script> -->
+    <!-- <script src="./idt/CCFsm.js"></script> -->
+    <!-- <script src="./idt/IdtApi.js"></script> -->
+    
+    <script src="IdtTest.js"></script>
+    
+    <style> 
+        .div-a{ float:left;width:49%;border:1px solid #00F} 
+        .div-b{ float:left;width:49%;border:1px solid #00F} 
+    </style> 
+</head> 
+
+<body> 
+    <a href="IdtJsSdk.zip">IDT JS SDK 请点击下载</a>
+
+    <h2 style="color:blue;">IDT 综合数字调度系统客户端【主界面】</h2>
+
+    <div class="div-a">
+<table border="1">
+    <tr>
+        <td>
+            MC地址：<input type="text" value="wss://192.168.2.11:8801/mc_wss" id="id_srv_addr" size=32/>
+            GPS地址：<input type="text" value="wss://192.168.2.11:8801/gs_wss" id="id_gpssrv_addr" size=32/>
+            
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+            用户号码：<input type="text" value="2010" id="id_my_num" size=20/>
+            密码：<input type="text" value="2010" id="id_my_pwd" size=15/>
+            <input type="button" id="id_btn_connect" value="启动" onclick="fn_Start()"/>
+            <input type="button" id="id_btn_close" value="退出" onclick="fn_Exit()"/>
+
+            
+            <input type="button" id="id_btn_MicDetect" value="MicDetect" onclick="fn_MicDetect()"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            归属组号码：<b id ="id_my_group"></b>
+        </td>
+    </tr>
+</table>
+
+<table border="1">
+    <tr>
+        <td>
+        	终端管理: <input type="text" value="2015" id="id_msmgr_num" size=32/>
+            <input type="button" id="id_btn_msmgr_readgps" value="读取GPS" onclick="fn_ReadGps()"/>
+            <input type="button" id="id_btn_msmgr_setgps" value="设置GPS" onclick="fn_SetGps()"/>
+            <input type="button" id="id_btn_msmgr_readvparam" value="读取视频参数" onclick="fn_ReadVideoParam()"/>
+            <input type="button" id="id_btn_msmgr_setvparam" value="设置视频参数" onclick="fn_SetVideoParam()"/>
+        	查看视频号码: <input type="text" value="2011" id="id_watchdown_num" size=32/>
+            <input type="button" id="id_btn_msmgr_transvideo" value="视频转发" onclick="fn_TransVideo()"/>
+            <input type="button" id="id_btn_msmgr_screenvideo" value="视频截屏" onclick="fn_ScreenVideo()"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            归属组号码：<b id ="id_my_group"></b>
+        </td>
+    </tr>
+</table>
+
+
+<table border="1">  
+    <tr>
+        <td>
+            对端号码：<input type="text" value="2041*27045" id="id_peer_num" size=20/>
+            状态：<b id ="id_status"></b>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            媒体方向：语音接收<input type="text" id="id_a_rx" size=1 value="1"/>
+            语音发送<input type="text" id="id_a_tx" size=1 value="1"/>
+            视频接收<input type="text" id="id_v_rx" size=1 value="1"/>
+            视频发送<input type="text" id="id_v_tx" size=1 value="1"/>
+            释放原因值<input type="text" id="id_rel_cause" size=1 value="0"/>
+            对端音量:<input type="text" id="peer_volume" size=1 value="1.0"/>
+            <input type="button" id="id_btn_peer_voice" value="设置对端音量" onclick="fn_peer_volume()"/>
+            本端音量:<input type="text" id="my_volume" size=1 value="1.0"/>
+            <input type="button" id="id_btn_my_volume" value="设置本端音量" onclick="fn_my_volume()"/>
+        </td>
+    </tr>   
+    <tr>
+        <td>
+            <input type="button" id="id_btn_callout" value="单呼呼出" onclick="fn_callout()"/>
+            <input type="button" id="id_btn_answer" value="应答" onclick="fn_answer()"/>
+            <input type="button" id="id_btn_rel" value="释放" onclick="fn_rel()"/>
+            <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+            <input type="button" id="id_btn_startsave" value="开始存储" onclick="fn_startsave()"/>
+            <input type="button" id="id_btn_stopsave" value="结束存储" onclick="fn_stopsave()"/>
+            <input type="button" id="id_btn_sendnum" value="通话中发送号码" onclick="fn_sendnum()"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        	<b id ="id_call_time">呼叫时间</b>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            讲话方信息:<b id ="id_call_talkinfo"></b>
+            呼叫信息:<b id ="id_call_info"></b>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="button" id="id_btn_watch_down" value="监控" onclick="fn_watch_down()"/>
+            <input type="button" id="id_btn_watch_up" value="视频上传" onclick="fn_watch_up()"/>
+            <input type="button" id="id_btn_watch_talkon" value="打开对讲" onclick="fn_watch_talkon()"/>
+            <input type="button" id="id_btn_watch_talkoff" value="关闭对讲" onclick="fn_watch_talkoff()"/>
+            <input type="button" id="id_btn_fullscreen" value="对端视频全屏显示" onclick="fn_fullscreen()"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+			组呼/会议组号码：<input type="text" value="20018888810" id="id_conf_num" size=20/>  <!-- 9000089999910 -->
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <input type="button" id="id_btn_gcallout" value="组呼呼出" onclick="fn_gcallout()"/>
+            <input type="button" id="id_btn_micwant" value="话权申请" onclick="fn_micwant()"/>
+            <input type="button" id="id_btn_micrel" value="话权释放" onclick="fn_micrel()"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        	是否直接呼出：<input type="text" value="0" id="id_ccallout_type" size=1/>
+            <input type="button" id="id_btn_ccallout" value="会议创建" onclick="fn_ccallout()"/>
+            <input type="button" id="id_btn_ccall_url" value="会议发送链接" onclick="fn_ccall_url()"/>
+            <input type="button" id="id_btn_ccalladd" value="会议添加" onclick="fn_ccall_add()"/>
+            <input type="button" id="id_btn_ccalldel" value="会议删除" onclick="fn_ccall_del()"/>
+            <input type="button" id="id_btn_ccall_dial" value="拨打会议号码" onclick="fn_ccall_dial()"/>
+            <input type="button" id="id_btn_ccall_query" value="会场查询" onclick="fn_ccall_query()"/>
+            <input type="button" id="id_btn_ccall_talkflag" value="自由发言" onclick="fn_ccall_talkflag()"/>
+            话权对应终端号码：<input type="text" value="986001" id="id_ccall_micnum" size=20/>
+            <input type="button" id="id_btn_ccall_micgive0" value="台上话权" onclick="fn_ccall_micgive0()"/>
+            <input type="button" id="id_btn_ccall_micgive1" value="台下话权" onclick="fn_ccall_micgive1()"/>
+            <input type="button" id="id_btn_ccall_mictake" value="收回话权" onclick="fn_ccall_mictake()"/>
+        </td>
+    </tr> 
+    
+    <tr>
+        <td>
+        	强插强拆号码：<input type="text" value="986001" id="id_force_num" size=20/>
+            <input type="button" id="id_btn_force_inj" value="强插" onclick="fn_force_inj()"/>
+            <input type="button" id="id_btn_force_rel" value="强拆" onclick="fn_force_rel()"/>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+            信息：<input type="text" id="id_im_msg" size=50/>
+            IDT.IM_TYPE_TXT=1<input type="number" value="1" id="id_im_type" size=10/>
+            <input type="button" id="id_btn_im_send" value="发送" onclick="fn_IMSend()"/>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+        	<input type="text" id="id_gps_param_subs" value="986001" size=8/>
+            <input type="button" id="id_btn_gps_subs" value="GPS订阅" onclick="fn_gps_subs()"/>
+            <input type="text" id="id_gps_param_report" value="986002,113.943718,22.543978,0.000000,0.000000" size=50/>
+            <input type="button" id="id_btn_gps_report" value="GPS上报" onclick="fn_gps_report()"/>
+            <input type="text" id="id_gps_param_his" value="986001,2017-11-22 00:00:00,2017-11-22 23:59:59" size=50/>
+            <input type="button" id="id_btn_gps_hisquery" value="GPS历史查询" onclick="fn_gps_hisquery()"/>
+        </td>
+    </tr>   
+</table>
+
+<table border="1">
+    <tr>
+        <td>
+        	<input type="text" id="id_cam_value" value="10" size=8/>
+            <input type="button" id="id_btn_cam_up" value="上" onclick="fn_cam_up()"/>
+            <input type="button" id="id_btn_cam_dowm" value="下" onclick="fn_cam_dowm()"/>
+            <input type="button" id="id_btn_cam_left" value="左" onclick="fn_cam_left()"/>
+            <input type="button" id="id_btn_cam_right" value="右" onclick="fn_cam_right()"/>
+            <input type="button" id="id_btn_cam_zoomwide" value="缩小" onclick="fn_cam_zoomwide()"/>
+            <input type="button" id="id_btn_cam_zoomtele" value="放大" onclick="fn_cam_zoomtele()"/>
+            <input type="button" id="id_btn_cam_focusnear" value="近焦" onclick="fn_cam_focusnear()"/>
+            <input type="button" id="id_btn_cam_focusfar" value="远焦" onclick="fn_cam_focusfar()"/>
+            <input type="button" id="id_btn_cam_irisopen" value="光圈放大" onclick="fn_cam_irisopen()"/>
+            <input type="button" id="id_btn_cam_irisclose" value="光圈缩小" onclick="fn_cam_irisclose()"/>
+            <input type="button" id="id_btn_cam_autoscan" value="自动扫描" onclick="fn_cam_autoscan()"/>
+            <input type="button" id="id_btn_cam_criuse" value="巡航" onclick="fn_cam_criuse()"/>
+            <input type="button" id="id_btn_cam_infrared" value="红外" onclick="fn_cam_infrared()"/>
+            <input type="button" id="id_btn_cam_rainstrip" value="雨刷" onclick="fn_cam_rainstrip()"/>
+            <input type="button" id="id_btn_cam_preset" value="预置位" onclick="fn_cam_preset()"/>
+            <input type="button" id="id_btn_cam_reboot" value="重启设备" onclick="fn_cam_reboot()"/>
+            <input type="button" id="id_btn_cam_stop" value="停止云台" onclick="fn_cam_stop()"/>
+        </td>
+    </tr>
+</table>    
+
+<table border="1">
+    <tr>
+        <td>
+            组织管理：
+            <input type="button" id="id_btn_org_query" value="查询" onclick="fn_OQuery()"/>
+            <input type="button" id="id_btn_org_add" value="添加" onclick="fn_OAdd()"/>
+            <input type="button" id="id_btn_org_del" value="删除" onclick="fn_ODel()"/>
+            <input type="button" id="id_btn_org_modify" value="修改" onclick="fn_OModify()"/>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            号码：<input type="text" value="" id="id_org_num" size=10/>
+            名字：<input type="text" value="" id="id_org_name" size=10/>
+            类型：<input type="number" value="" id="id_org_type" size=10/>
+            描述：<input type="text" value="" id="id_org_desc" size=20/>
+            总用户数：<input type="number" value="" id="id_org_ucount" size=10/>
+            调度台数：<input type="number" value="" id="id_org_dcount" size=10/>
+            组数：<input type="number" value="" id="id_org_gcount" size=10/>
+            终端用户数：<input type="number" value="" id="id_org_endusercount" size=10/>
+            调度台号码：<input type="text" value="" id="id_org_d0num" size=10/>
+            调度台密码：<input type="text" value="" id="id_org_d0pwd" size=10/>
+            调度台显示名字：<input type="text" value="" id="id_org_dshowname" size=10/>
+            调度台图标：<input type="text" value="" id="id_org_dicon" size=10/>
+            APP显示名字：<input type="text" value="" id="id_org_appshowname" size=10/>
+            APP图标：<input type="text" value="" id="id_org_appicon" size=10/>
+            用户号段：<input type="text" value="" id="id_org_usegstart" size=10/> ~ <input type="text" value="" id="id_org_usegend" size=10/>
+            组号段：<input type="text" value="" id="id_org_gsegstart" size=10/> ~ <input type="text" value="" id="id_org_gsegend" size=10/>
+            调度台号段：<input type="text" value="" id="id_org_dssegstart" size=10/> ~ <input type="text" value="" id="id_org_dssegend" size=10/>
+            开始时间：<input type="text" value="" id="id_org_starttime" size=10/>
+            结束时间：<input type="text" value="" id="id_org_endtime" size=10/>
+        </td>
+    </tr>
+</table>
+   
+<table border="1">
+    <tr>
+        <td>
+            用户管理：
+            <input type="button" id="id_btn_user_query_all" value="查询所有用户" onclick="fn_UQueryAll()"/>
+            <input type="button" id="id_btn_user_query" value="查询" onclick="fn_UQuery()"/>
+            <input type="button" id="id_btn_user_add" value="添加" onclick="fn_UAdd()"/>
+            <input type="button" id="id_btn_user_del" value="删除" onclick="fn_UDel()"/>
+            <input type="button" id="id_btn_user_modify" value="修改" onclick="fn_UModify()"/>
+            个数:<input type="number" value="1" id="id_user_count" size=10/>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            号码：<input type="text" value="" id="id_user_num" size=10/>
+            名字：<input type="text" value="" id="id_user_name" size=10/>
+            密码：<input type="text" value="" id="id_user_pwd" size=10/>
+            类型：<input type="number" value="" id="id_user_type" size=10/>
+            属性：<input type="number" value="" id="id_user_attr" size=10/>
+            状态：<input type="number" value="" id="id_user_status" size=10/>
+            优先级：<input type="number" value="" id="id_user_prio" size=10/>
+            并发数：<input type="number" value="" id="id_user_concurrent" size=10/>
+            IP地址：<input type="text" value="" id="id_user_cfgip" size=10/>
+            地址：<input type="text" value="" id="id_user_addr" size=10/>
+            联系方式：<input type="text" value="" id="id_user_contact" size=10/>
+            描述：<input type="text" value="" id="id_user_desc" size=10/>
+            创建时间：<input type="text" value="" id="id_user_ctime" size=10/>
+            有效时间：<input type="text" value="" id="id_user_vtime" size=10/>
+            摄像头类型：<input type="number" value="" id="id_user_camtype" size=10/>
+            摄像头IP：<input type="text" value="" id="id_user_camip" size=10/>
+            摄像头端口：<input type="text" value="" id="id_user_camport" size=10/>
+            摄像头登录名字：<input type="text" value="" id="id_user_camname" size=10/>
+            摄像头登录密码：<input type="text" value="" id="id_user_campwd" size=10/>
+            摄像头通道数：<input type="number" value="" id="id_user_camchannum" size=10/>
+            工作信息：<input type="text" value="" id="id_user_workinfo" size=10/>
+            父组信息：<input type="text" value="" id="id_user_fginfo" size=10/>
+            代理注册：<input type="text" value="" id="id_user_proxyreg" size=10/>
+            DataRole：<input type="number" value="" id="id_user_datarole" size=10/>
+            MenuRole：<input type="number" value="" id="id_user_menurole" size=10/>
+            DeptNum：<input type="text" value="" id="id_user_deptnum" size=10/>
+            ID：<input type="text" value="" id="id_user_id" size=10/>
+            工作证：<input type="text" value="" id="id_user_workid" size=10/>
+            工作单位：<input type="text" value="" id="id_user_workunit" size=10/>
+            职务：<input type="text" value="" id="id_user_worktitle" size=10/>
+            车牌：<input type="text" value="" id="id_user_carid" size=10/>
+            电话号码：<input type="text" value="" id="id_user_tel" size=10/>
+            其他：<input type="text" value="" id="id_user_other" size=10/>
+        </td>
+    </tr>
+</table> 
+
+<table border="1">
+    <tr>
+        <td>
+            组管理：
+            <input type="button" id="id_btn_group_query_all" value="查询所有组" onclick="fn_GQueryAll()"/>
+            <input type="button" id="id_btn_group_query" value="查询" onclick="fn_GQuery()"/>
+            <input type="button" id="id_btn_group_add" value="添加" onclick="fn_GAdd()"/>
+            <input type="button" id="id_btn_group_del" value="删除" onclick="fn_GDel()"/>
+            <input type="button" id="id_btn_group_modify" value="修改" onclick="fn_GModify()"/>
+            <input type="button" id="id_btn_group_queryu" value="查询用户" onclick="fn_GQueryU()"/>
+            所有组：<input type="number" value="" id="id_all_group" size=1/>
+            所有用户：<input type="number" value="" id="id_all_user" size=1/>
+            页数：<input type="number" value="" id="id_page_index" size=1/>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            号码：<input type="text" value="" id="id_group_num" size=10/>
+            名字：<input type="text" value="" id="id_group_name" size=10/>
+            组类型：<input type="number" value="" id="id_group_type" size=10/>
+            优先级：<input type="number" value="" id="id_group_prio" size=10/>
+            关联组：<input type="text" value="" id="id_group_agnum" size=10/>
+            组成员：<input type="text" value="" id="id_group_member" size=10/>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            单个用户数据：
+            <input type="button" id="id_btn_group_queryuf" value="查询所在组" onclick="fn_UQueryG()"/>
+            <input type="button" id="id_btn_group_addu" value="添加用户" onclick="fn_GAddU()"/>
+            <input type="button" id="id_btn_group_delu" value="删除用户" onclick="fn_GDelU()"/>
+            <input type="button" id="id_btn_group_modifyu" value="修改用户" onclick="fn_GModifyU()"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            用户号码：<input type="text" value="" id="id_group_unum" size=10/>
+            用户类型：<input type="number" value="" id="id_group_utype" size=10/>
+            用户优先级：<input type="number" value="" id="id_group_uprio" size=10/>
+            用户父组：<input type="text" value="" id="id_group_ufg" size=10/>
+        </td>
+    </tr>
+</table>
+
+
+    </div> 
+    
+    <div class="div-b">
+<table border="1">
+    <tr>
+        <td>本地视频：</td>
+        <td width="300" height="300">
+        	<video width="300" height="300" id="id_video_my_v" autoplay muted></video>
+        	<OBJECT id="id_video_my_o" CLASSID="clsid:C1DCB838-B5B4-4AF0-82B6-BB2FEB63ED2E" CODEBASE="" WIDTH=300 HEIGHT=300 ALIGN=center HSPACE=0 VSPACE=0></OBJECT>
+        	<a href="IDTShellSetupAll.exe" id="id_video_my_down">未安装OCX控件,请点击下载安装</a>
+        </td>
+        <td>对端视频：</td>
+        <td width="300" height="300">
+        	<video width="300" height="300" id="id_video_peer_v" autoplay></video>
+        	<OBJECT id="id_video_peer_o" CLASSID="clsid:C1DCB838-B5B4-4AF0-82B6-BB2FEB63ED2E" CODEBASE="" WIDTH=300 HEIGHT=300 ALIGN=center HSPACE=0 VSPACE=0></OBJECT>
+        	<a href="IDTShellSetupAll.exe" id="id_video_peer_down">未安装OCX控件,请点击下载安装</a>
+   		</td>
+    </tr> 
+</table>
+
+<label><input type="checkbox" id="id_ck_msgrx" value="" onclick="fn_ck_msgrx()"/>是否显示心跳/定时发送的订阅</label> 
+
+<table border="1">
+    <tr>
+        <td>消息记录：</td>
+        <td><textarea id="id_rxtx_msg" rows="31" cols="100"></textarea> </td>
+    </tr>
+</table>
+    </div>
+
+<table border="1">
+    <tr>
+        <td>
+            MC路由管理：
+            <input type="button" id="id_btn_route_query" value="查询" onclick="fn_RQuery()"/>
+            <input type="button" id="id_btn_route_add" value="添加" onclick="fn_RAdd()"/>
+            <input type="button" id="id_btn_route_del" value="删除" onclick="fn_RDel()"/>
+            <input type="button" id="id_btn_route_modify" value="修改" onclick="fn_RModify()"/>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            路由名字：<input type="text" value="" id="id_route_name" size=10/>
+            对端区号：<input type="text" value="" id="id_route_peer_zone" size=10/>
+            对端组织号码：<input type="text" value="" id="id_route_peer_org" size=10/>
+            本端区号：<input type="text" value="" id="id_route_my_zone" size=10/>
+            本端组织号码：<input type="text" value="" id="id_route_my_org" size=10/>
+            本端总机号码：<input type="text" value="" id="id_route_switchboard" size=10/>
+            呼叫：<input type="number" value="" id="id_route_call" size=10/>
+            即时消息：<input type="number" value="" id="id_route_im" size=10/>
+            操作维护：<input type="number" value="" id="id_route_oam" size=10/>
+            GPS：<input type="number" value="" id="id_route_gps" size=10/>
+            优先级：<input type="number" value="" id="id_route_metr" size=10/>
+            接口模块：<input type="text" value="" id="id_route_fid" size=10/>
+            接口IP地址：<input type="text" value="" id="id_route_ipaddr" size=10/>
+            注册号码：<input type="text" value="" id="id_route_regnum" size=10/>
+        </td>
+    </tr>
+</table>
+    
+</body> 
+</html>

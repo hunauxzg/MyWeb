@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主界面</title>
+     <link rel="stylesheet" href="../icon/iconfont.css">
+    <script src="jquery.min.js"></script>
+    <script src="jquery.easyui-1.5.1.min.js"></script>
+    <script src="ChinesePY.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "微软雅黑";
+            list-style: none;
+        }
+
+        .icon {
+            font-family: iconfont !important;
+        }
+        .dispatch > .searchBar{
+            position: absolute;
+            top:5px;
+            left:280px;
+            width:300px;
+            height:41px;
+            border-radius: 3px;
+            box-shadow: 0px 1px 3px 1px rgba(155,159,175,1);
+        }
+
+        .dispatch > .searchBar > .searchPlace{
+            font-size:14px;
+            border:none;
+            width:300px;
+            height:41px;
+            padding-left:14px;
+            border-radius: 3px;
+        }
+
+        .dispatch > .searchBar > .searchPlace::-webkit-input-placeholder{/*Webkit browsers*/
+            color:#9b9faf;
+            font-size:14px;
+        }
+
+        .dispatch > .searchBar > .icon{
+            background: #166ba8;
+            color: white;
+            width:46px;
+            height:41px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size:24px;
+            cursor: pointer;
+            position: absolute;
+            right:0;
+            top:0;
+            border-radius: 0px 3px 3px 0;
+        }
+        .dispatch > .searchBar ul{
+            display:none;
+            position: relative;
+            border:1px solid #338bc4;
+            max-height:460px;
+            width:100%;
+            overflow-x:hidden;
+            overflow-y: auto;
+        }
+        .dispatch > .searchBar ul li{
+            width:100%;
+            height:35px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .dispatch > .searchBar ul li.active{
+            background-color:#EDEBE9;
+        }
+        .dispatch > .searchBar ul li .icon{
+            font-size:16px;
+            color:#999999;
+            margin:-1px 8px 0 8px;
+        }
+        .dispatch > .searchBar ul li .message1{
+            font-size:14px;
+            color: #757575;
+            margin-right:8px;
+        }
+        .dispatch > .searchBar ul li .message2{
+            font-size:12px;
+            color:#999999;
+        }
+    </style>
+</head>
+<body>
+<div id="interface">
+    <div class="content">
+        <!--调度界面-->
+        <div class="dispatch active">
+            <div class="searchBar">
+                <input class="searchPlace" type="text" placeholder="搜索地点">
+                <div class="icon">&#xe60d;</div>
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let dataArr = ['某某某某广场 某某某区某某路123号','某某aaa广场 某某某区某某路123号','某某qssqs场 某某某区某某路123号','某某sqsqssdfasf广场 某某某区某某路123号']
+    let dataMesArr = []
+    dataArr.map((item)=>{
+        let dataMesJP = Pinyin.GetJP(item)
+        dataMesArr.push(dataMesJP)
+        return dataMesArr
+    })
+    searchPlace()
+    function searchPlace() {
+        let nowCount
+        //初始化
+        $('.dispatch > .searchBar ul').css('display','none')
+        let $ulTags = $('.dispatch > .searchBar ul')
+        //监听输入事件
+        $('.dispatch > .searchBar > .searchPlace').on('input', function(event) {
+            nowCount = 0
+            $('.dispatch > .searchBar ul').html('')
+            //获取到当前输入的值
+            let searchMessage = $('.dispatch > .searchBar > .searchPlace').val()
+            if(searchMessage !==''){
+                //通过插件获取输入内容的首拼
+                let searchMesJP = Pinyin.GetJP(searchMessage)
+                //通过当前输入的值来检索数据，然后通过相似数据创建li节点
+                dataMesArr.map((item,index)=>{
+                    if(item.includes(searchMesJP) === true || searchMesJP.includes(item)===true){
+                        $('.dispatch > .searchBar ul').append(`<li><div class="icon">&#xe60d;</div><div class="message">${dataArr[index]}</div></li>`)
+                    }else{}
+                })
+                $('.dispatch > .searchBar ul').css('display','block')
+                event.stopPropagation()
+                //创建节点
+                let $liTags = $ulTags.find('li')
+                for(let i = 0;i<$liTags.length;i++){
+                    let message = $('.dispatch > .searchBar ul').find('li > .message').eq(i).text()
+                    $('.dispatch > .searchBar ul').find('li > .message').eq(i).text('')
+                    let newMessage = []
+                    newMessage = message.split(" ")
+                    let message1 = newMessage[0]
+                    let message2 = newMessage[1]
+                    $ulTags.find('li').eq(i).append('<div class="message1"></div><div class="message2">message2</div>')
+                    $ulTags.find('li').eq(i).find('.message1').text(message1)
+                    $ulTags.find('li').eq(i).find('.message2').text(message2)
+
+                    //创建后通过文字检索高亮
+                    let words = duplicateWord(message,searchMessage);
+                    let newulTags1 = $liTags.eq(i).find('.message1').text().split(words).join('<span style="color:black;">' + words + '</span>')
+                    let newulTags2 = $liTags.eq(i).find('.message2').text().split(words).join('<span style="color:black;">' + words + '</span>')
+                    $liTags.eq(i).find('.message1').html(newulTags1)
+                    $liTags.eq(i).find('.message2').html(newulTags2)
+                }
+                searchUpandDown(nowCount)
+            }
+        });
+        //hover效果
+        $ulTags.on('mouseenter','li',function(event){
+            let liIndex = $(event.currentTarget).index()
+            liTagsToggle(liIndex)
+            nowCount = liIndex +1
+//             getMessageValueit(liIndex)
+            searchUpandDown(nowCount)
+            return nowCount
+        });
+        $ulTags.on('mouseleave','li',function(event){
+            $ulTags.find('li').removeClass('active')
+        })
+        //阻止input点击事件
+        $('.dispatch > .searchBar > .searchPlace').on('click',function (event) {
+            return false
+        })
+        //点击li阻止默认事件
+        $ulTags.on('click','li',function (event) {
+            return false
+            //继续添加操作
+        })
+        //点击它处检索内容消失
+        $('html').on('click',function (event) {
+            $('.dispatch > .searchBar ul').css('display','none')
+        })
+        //判断现在的up/down位置
+        function searchUpandDown(nowCount) {
+            let index
+            let $liTags = $ulTags.find('li')
+            if(nowCount === 0){
+                $liTags.removeClass('active')
+            }
+            $(document).keydown(function(event){
+                var keyNum = event.which;  //获取键值
+                var Item = $('#switcher');  //要移动的元素
+                Item.css({position:'relative'}); //设置position
+                switch(keyNum){ //判断按键
+                    case 38:
+                        nowCount = nowCount - 1
+                        if(Math.abs(nowCount) > $liTags.length){
+                            nowCount = parseInt(nowCount/$liTags.length)
+                        }
+                        if(nowCount < 0){
+                            index = Math.abs($liTags.length + nowCount)
+                            nowCount = $liTags.length - Math.abs(nowCount) + 1
+                            liTagsToggle(index)
+                            getMessageValueit(index)
+                        }else if(nowCount > 0){
+                            index = nowCount -1
+                            liTagsToggle(index)
+                            getMessageValueit(index)
+                        }else if(nowCount === 0){
+                            $liTags.removeClass('active')
+                        }
+                        // return nowCount
+                        break;
+                    case 40:
+                        nowCount = nowCount + 1
+                        if(nowCount > $liTags.length){
+                            nowCount = parseInt(nowCount/$liTags.length)
+                        }
+                        if(Math.abs(nowCount) > 0){
+                            index = nowCount-1
+                            liTagsToggle(index)
+                            getMessageValueit(index)
+                        }else{}
+                        // return nowCount
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+        function liTagsToggle(index) {
+            $ulTags.find('li').removeClass('active')
+            $ulTags.find('li').eq(index).addClass('active')
+        }
+        //获取并赋值input
+        function getMessageValueit(index) {
+            let mes1 = $('.dispatch > .searchBar ul').find('li').eq(index).find('.message1').text()
+            $('.dispatch > .searchBar > .searchPlace').val(mes1)
+        }
+        function duplicateWord(str1, str2) {
+            var max = str1.length > str2.length ? str1 : str2;
+            var min = (max == str1 ? str2 : str1);
+            for(var i = 0; i < min.length; i++){   //0 1 2 3 4 5
+                for(var x = 0, y = min.length - i;y != min.length + 1;x++,y++){
+                    var newStr = min.substring(x,y);
+                    if(max.indexOf(newStr) !== -1){
+                        return newStr;
+                    }
+                }
+            }
+            return -1;
+        }
+    }
+</script>
+</body>
+</html>

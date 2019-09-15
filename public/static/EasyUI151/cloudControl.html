@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../icon/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="./themes/insdep/easyui.css"/>
+<!-- 	<link rel="stylesheet" type="text/css" href="./themes/insdep/easyui_animation.css"/> -->
+<!-- 	<link rel="stylesheet" type="text/css" href="./themes/insdep/easyui_plus.css"/> -->
+<!-- 	<link rel="stylesheet" type="text/css" href="./themes/insdep/insdep_theme_default.css"/> -->
+<!-- 	<link rel="stylesheet" type="text/css" href="./themes/insdep/icon.css"/> -->
+
+    <script src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.cookie.js"></script>
+	<script type="text/javascript" src="jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="./locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="./themes/insdep/jquery.insdep-extend.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei Light";
+        }
+
+        .cloud-control {
+        	position: absolute;
+            width: 270px;
+            height: 171px;
+            background-color: #fcfcfc;
+            border-radius: 3px;
+            border: 1px solid #1a5e92;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .cloud-control .title {
+            height: 30px;
+            font-size: 12px;
+            line-height: 30px;
+        }
+
+        .cloud-control .title .text {
+            font-family: iconfont;
+            float: left;
+            padding-left: 5px;
+        }
+
+        .cloud-control .title .close {
+            font-family: iconfont;
+            float: right;
+            padding-right: 5px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .cloud-control .title .close:hover {
+            opacity: .8;
+        }
+
+        .cloud-control .content .control-pad {
+            width: 106px;
+            height: 106px;
+            margin-left: 23px;
+            float: left;
+            margin-top: 12px;
+            margin-right: 35px;
+        }
+
+        .cloud-control .content .control-pad > div {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #1a5a8b;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 50px 0 0 0;
+            position: absolute;
+            cursor: pointer;
+            background-color: #ebebeb;
+        }
+
+        .cloud-control .content .control-pad > div:hover {
+            background-color: #e2e2e2;
+        }
+        .cloud-control .content .control-pad > div:active {
+            background-color: #ebebeb;
+        }
+        .cloud-control .content .control-pad > div div {
+            font-family: iconfont;
+            transform: rotate(-45deg);
+        }
+
+        .cloud-control .content .control-pad > div:nth-child(1) {
+            transform: rotate(45deg);
+            transform-origin: 53px 53px;
+        }
+
+        .cloud-control .content .control-pad > div:nth-child(2) {
+            transform: rotate(135deg);
+            transform-origin: 53px 53px;
+        }
+
+        .cloud-control .content .control-pad > div:nth-child(3) {
+            transform: rotate(225deg);
+            transform-origin: 53px 53px;
+        }
+
+        .cloud-control .content .control-pad > div:nth-child(4) {
+            transform: rotate(315deg);
+            transform-origin: 53px 53px;
+        }
+
+        .cloud-control .content .btn-wrap {
+            float: right;
+            margin-right: 24px;
+            margin-top: 5px;
+        }
+
+        .cloud-control .content .btn-wrap > div {
+            border: 1px solid #1a5a8b;
+            border-radius: 2px;
+            text-align: center;
+            width: 80px;
+            height: 32px;
+            line-height: 30px;
+            font-family: iconfont;
+            margin-top: 19px;
+            cursor: pointer;
+            background-color: #ebebeb;
+        }
+
+        .cloud-control .content .btn-wrap > div:hover {
+            background-color: #e2e2e2;
+        }
+        .cloud-control .content .btn-wrap > div:active {
+            background-color: #ebebeb;
+        }
+        /*大云台控制*/
+        .big-cloud-control {
+            position: absolute;
+            width: 412px;
+            height: 432px;
+            background-color: #333333;
+            border-radius: 3px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .big-cloud-control .title {
+            height: 30px;
+            font-size: 12px;
+            line-height: 30px;
+            color: white;
+        }
+
+        .big-cloud-control .title .text {
+            font-family: iconfont;
+            float: left;
+            padding-left: 5px;
+        }
+
+        .big-cloud-control .title .close {
+            font-family: iconfont;
+            float: right;
+            padding-right: 5px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .big-cloud-control .title .close:hover {
+            opacity: .8;
+        }
+
+        .big-cloud-control .title .times {
+            float: right;
+            width: 80px;
+            height: 18px;
+            margin-top: 6px;
+            background-color: #121212;
+            border: 1px solid #666666;
+            border-radius: 2px;
+            margin-right: 10px;
+        }
+
+        .big-cloud-control .title .times div {
+            line-height: 18px;
+            float: left;
+            font-size: 12px;
+            text-align: center;
+            width: 26px;
+            height: 18px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .big-cloud-control .title .times div.active {
+            background-color: #5d5d5d;
+        }
+
+        .big-cloud-control .video-wrap {
+            position: absolute;
+            top: 36px;
+            left: 6px;
+            right: 6px;
+            bottom: 172px;
+            background-color: #92cddc;
+            border-radius: 2px;
+        }
+
+        .big-cloud-control .content {
+            height: 172px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .big-cloud-control .content .control-wrap {
+            width: 300px;
+            height: 160px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .big-cloud-control .content .control-pad {
+            width: 106px;
+            height: 106px;
+            margin-left: 23px;
+            float: left;
+            margin-top: 12px;
+            margin-right: 35px;
+        }
+
+        .big-cloud-control .content .control-pad > div {
+            width: 50px;
+            height: 50px;
+            border: 1px solid white;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 50px 0 0 0;
+            position: absolute;
+            cursor: pointer;
+            background-color: #1a5e92;
+        }
+
+        .big-cloud-control .content .control-pad > div:hover {
+            background-color: #227bbf;
+        }
+        .big-cloud-control .content .control-pad > div:active {
+            background-color: #1a5a8b;
+        }
+        .big-cloud-control .content .control-pad > div div {
+            font-family: iconfont;
+            transform: rotate(-45deg);
+            color: white;
+        }
+
+        .big-cloud-control .content .control-pad > div:nth-child(1) {
+            transform: rotate(45deg);
+            transform-origin: 53px 53px;
+        }
+
+        .big-cloud-control .content .control-pad > div:nth-child(2) {
+            transform: rotate(135deg);
+            transform-origin: 53px 53px;
+        }
+
+        .big-cloud-control .content .control-pad > div:nth-child(3) {
+            transform: rotate(225deg);
+            transform-origin: 53px 53px;
+        }
+
+        .big-cloud-control .content .control-pad > div:nth-child(4) {
+            transform: rotate(315deg);
+            transform-origin: 53px 53px;
+        }
+
+        .big-cloud-control .content .btn-wrap {
+            float: right;
+            margin-right: 24px;
+            margin-top: 5px;
+        }
+
+        .big-cloud-control .content .btn-wrap > div {
+            border: 1px solid white;
+            border-radius: 2px;
+            text-align: center;
+            width: 80px;
+            height: 32px;
+            line-height: 30px;
+            font-family: iconfont;
+            margin-top: 19px;
+            cursor: pointer;
+            background-color: #1a5e92;
+            color: white;
+        }
+
+        .big-cloud-control .content .btn-wrap > div:hover {
+            background-color: #227bbf;
+        }
+        .big-cloud-control .content .btn-wrap > div:active {
+            background-color: #1a5e92;
+        }
+        
+        .big-cloud-control .content .speed-wrap {
+            position: absolute;
+            margin-top: 127px;
+            font-size: 9px;
+    		color: white;
+        }
+        .big-cloud-control .content .speed-wrap .speed-label {
+        	float: left;
+        	width: 100px;
+        }
+        .big-cloud-control .content .speed-wrap .speed-label span {
+        	font-size: 9px;
+    		color: #29fdeb;
+        }
+        .big-cloud-control .content .speed-wrap .speed-input {
+        	float: left;
+        	width: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="cloud-control">
+    <div class="title">
+        <div class="text">&#xe655 云台控制</div>
+        <div class="close">&#xe6c4</div>
+    </div>
+    <div class="content">
+        <div class="control-pad">
+            <div>
+                <div>&#xe6c7</div>
+            </div>
+            <div>
+                <div>&#xe6c7</div>
+            </div>
+            <div>
+                <div>&#xe6c7</div>
+            </div>
+            <div>
+                <div>&#xe6c7</div>
+            </div>
+        </div>
+        <div class="btn-wrap">
+            <div class="enlarge">&#xe765 放大</div>
+            <div class="narrow">&#xe744 缩小</div>
+        </div>
+    </div>
+</div>
+<div class="big-cloud-control">
+    <div class="title">
+        <div class="text">&#xe655 云台控制</div>
+        <div class="close">&#xe6c4</div>
+        <div class="times">
+            <div class="active">x1</div>
+            <div>x2</div>
+            <div>x4</div>
+        </div>
+    </div>
+    <div class="video-wrap"></div>
+    <div class="content">
+        <div class="control-wrap">
+            <div class="control-pad">
+                <div>
+                    <div>&#xe6c7</div>
+                </div>
+                <div>
+                    <div>&#xe6c7</div>
+                </div>
+                <div>
+                    <div>&#xe6c7</div>
+                </div>
+                <div>
+                    <div>&#xe6c7</div>
+                </div>
+            </div>
+            <div class="btn-wrap">
+                <div class="enlarge">&#xe765 放大</div>
+                <div class="narrow">&#xe744 缩小</div>
+            </div>
+            <div class="speed-wrap">
+            	<div class="speed-label">调节速率：&nbsp;<span class="speedVal">5</span>&nbsp;</div>
+            	<div class="speed-input"><input class="easyui-slider speedInput" value="5" style="width:200px;" data-options="min:0,max:255,step:5"/></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+	//可拖动效果
+	$('.cloud-control .title').off('mousedown').on('mousedown',function (event) {
+	    var isMove = true;
+	    var abs_x = event.pageX - $('.cloud-control').offset().left;
+	    var abs_y = event.pageY - $('.cloud-control').offset().top;
+	    $(document).off('mousemove').on('mousemove',function (event) {
+	        if (isMove) {
+	            $('.cloud-control').css({
+	                'left': event.pageX - abs_x,
+	                'top': event.pageY - abs_y,
+	                'transform': 'translate(0, 0)'
+	            });
+	        }
+	    }).off('mouseup').on('mouseup',function () {
+	        isMove = false;
+	    });
+	});
+
+    //可拖动效果
+    $('.big-cloud-control .title').off('mousedown').on('mousedown',function (event) {
+        var isMove = true;
+        var abs_x = event.pageX - $('.big-cloud-control').offset().left;
+        var abs_y = event.pageY - $('.big-cloud-control').offset().top;
+        $(document).off('mousemove').on('mousemove',function (event) {
+            if (isMove) {
+                $('.big-cloud-control').css({
+                    'left': event.pageX - abs_x,
+                    'top': event.pageY - abs_y,
+                    'transform': 'translate(0, 0)'
+                });
+            }
+        }).off('mouseup').on('mouseup',function () {
+            isMove = false;
+        });
+    });
+
+    //倍数
+    $('.big-cloud-control .title .times div').off('click').on('click', function () {
+        var clientWidth = document.documentElement.clientWidth;
+        var clientHeight = document.documentElement.clientHeight;
+        switch ($(this).text()) {
+            case "x1":
+                $('.big-cloud-control').css({
+                    width: 412,
+                    height: 432
+                });
+                $('.big-cloud-control .title .times div').removeClass('active');
+                $(this).addClass('active');
+                break;
+            case "x2":
+                if ((824 < clientWidth) && (700 < clientHeight)) {
+                    $('.big-cloud-control').css({
+                        width: 824,
+                        height: 700
+                    });
+                    $('.big-cloud-control .title .times div').removeClass('active');
+                    $(this).addClass('active');
+                } else {
+                    alert('当前倍数已超出显示器分辨率');
+                }
+                break;
+            case "x4":
+                if ((4 * 412 < clientWidth) && (4 * 423 < clientHeight)) {
+                    $('.big-cloud-control').css({
+                        width: 1648,
+                        height: 1500
+                    });
+                    $('.big-cloud-control .title .times div').removeClass('active');
+                    $(this).addClass('active');
+                } else {
+                    alert('当前倍数已超出显示器分辨率');
+                }
+                break;
+        }
+    });
+    function checkUrlValid(url) {
+    	var flag = true;
+    	var ajaxTimeoutTest = $.ajax({
+    		url: url,
+    		type: 'GET',
+//     		async: false,
+    		timeout: 1000,		
+    		data: {},  //请求所传参数，json格式
+			dataType: 'json',	//返回的数据格式
+			success: function(data) { //请求成功的回调函数
+				flag = true;
+			},
+			complete : function(XMLHttpRequest,status) { //请求完成后最终执行参数
+				if (status=='timeout') {	//超时,status还有success,error等值的情况
+					ajaxTimeoutTest.abort();
+					flag = false;
+				}
+			}
+    	});
+    	return flag;
+    }
+    $('.narrow').off('click').on('click', function () {
+    	var flag = checkUrlValid('https://maps.googleapis.com');
+    	alert(flag);
+    });
+    $('.speedInput').slider({
+    	onChange: function(newValue, oldValue) {
+    		$('.speedVal').text(newValue);
+    	}
+    });
+</script>
+</body>
+</html>

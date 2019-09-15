@@ -1,0 +1,101 @@
+
+.datagrid .datagrid-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+}
+.datagrid .datagrid-cell {
+    padding: 0;
+}
+.datagrid .datagrid-header-row td {
+    color: white;
+    height: 40px;
+    font-size: 14px;
+}
+.datagrid .datagrid-header-row td:nth-child(even) {
+    background-color: #266ca1;
+}
+.datagrid .datagrid-header-row td:nth-child(odd) {
+    background-color: #1a5e92;
+}
+.datagrid .datagrid-row {
+    height: 40px;
+    transition: all .2s;
+}
+.datagrid .datagrid-row:nth-child(odd) {
+    background-color: #fafafa;
+}
+.datagrid .datagrid-row:nth-child(even) {
+    background-color: #f5f5f5;
+}
+.datagrid .datagrid-row:hover {
+    background-color: #e5e5e5;
+}
+.datagrid .datagrid-pager{
+    background-color: #dbdbdb;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.datagrid .pagination-page-list {
+    border-radius: 3px;
+    height: 22px;
+    width: 50px;
+    outline:none;
+    transition: all .2s;
+
+}
+.datagrid .pagination-page-list:focus {
+    box-shadow: 0 0 5px rgba(65, 148, 255, 0.75);
+}
+.datagrid .pagination-info {
+    position: absolute;
+    right: 200px;
+}
+.datagrid .pagination-num {
+    border-radius: 3px;
+    outline:none;
+    transition: all .2s;
+
+}
+.datagrid .pagination-num:focus {
+    box-shadow: 0 0 5px rgba(65, 148, 255, 0.75);
+}
+.datagrid .btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 10.8%;
+    height: 34px;
+    background-color: #266ca1;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: iconfont !important;
+    line-height: 34px;
+}
+.datagrid .btn:hover {
+    background-color: #1f59a1;
+}
+.datagrid .btn:active {
+    background-color: #357ba1;
+}
+.datagrid .icon {
+    font-family: 'iconfont';
+    font-size: 16px;
+    margin-left: 5%;
+    margin-right: 5%;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+}

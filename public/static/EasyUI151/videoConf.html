@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.min.js"></script>
+    <script src="jquery.easyui-1.5.1.min.js"></script>
+    <script src="locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" href="../icon/iconfont.css">
+    <link rel="stylesheet" href="themes/insdep/easyui.css">
+    <link rel="stylesheet" href="themes/insdep/icon.css">
+    <link rel="stylesheet" href="themes/insdep/iconfont/demo.css">
+   
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: "Microsoft YaHei", "微软雅黑";
+            color: #4c4c4c;
+            box-sizing: border-box;
+        }
+        .clearfix::after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+        .checkboxWrap label {
+            cursor: pointer;
+            display: inline-block;
+            right: 10px;
+            margin-right: 2px;
+        }
+        .checkboxWrap label span {
+            vertical-align: middle;
+        }
+        .checkbox {
+            display: none;
+        }
+        .checkSpan {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #fff;
+            border: 1px solid #7f9abc;
+        }
+        .checkSpan:hover {
+            border: 1px solid rgba(11, 78, 126, 1);
+        }
+        .checkbox:checked + .checkSpan:after {
+            content: '';
+            display: inline-block;
+            position: relative;
+            width: 9px;
+            height: 4px;
+            border: 2px solid #ffffff;
+            border-bottom: none;
+            border-left: none;
+            transform: rotate(130deg);
+            margin-bottom: 13px;
+            vertical-align: middle;
+            left: 2px;
+            top: 2px;
+        }
+        .checkbox:checked + .checkSpan {
+            background-color: rgba(22, 107, 168, 1);
+        }
+        .icon {
+            font-family: iconfont!important;
+        }
+        #interface-video {
+            position: absolute;
+            top: 65px;
+            right: 58px;
+            width: 1052px;
+            height: 595px;
+            border-radius: 3px;
+            background-color: rgba(0,0,0,0.85);
+        }
+        #interface-video.full-screen-active {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #interface-video.full-active {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #interface-video-wrap .video-gif {
+            display: none;
+            position: absolute;
+            right: 58px;
+            top: 65px;
+            width: 40px;
+            height: 40px;
+            border-radius: 2px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        #interface-video-wrap .video-gif.active {
+            display: block;
+        }
+        #interface-video-wrap .video-gif:hover {
+            opacity: .9;
+        }
+        #interface-video>.top-bar {
+            padding-top: 6px;
+            margin-bottom: 3px;
+            padding-left: 6px;
+            padding-right: 6px;
+            height: 36px;
+        }
+        #interface-video>.top-bar .float-right {
+            font-size: 12px;
+            height: 18px;
+            line-height: 12px;
+            padding: 3px 7px;
+            margin-bottom: 6px;
+            border-radius: 2px;
+            margin-left: 10px;
+            cursor: pointer;
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+            color: white;
+        }
+        #interface-video>.top-bar .float-right:active {
+            opacity: .9;
+        }
+        #interface-video>.top-bar>.full-screen {
+            background-color: #4eab2e;
+        }
+        #interface-video>.top-bar>.minimum {
+            background-color: #2585cb;
+        }
+        #interface-video>.top-bar>.full-screen:hover {
+            background-color: #2d950f;
+        }
+        #interface-video>.top-bar>.minimum:hover {
+            background-color: #2772cb;
+        }
+        #interface-video>.top-bar .float-left {
+            padding-top: 3px;
+            font-size: 12px;
+            color: white;
+        }
+        #interface-video>.content>.float-left {
+            width: 254px;
+            border-radius: 3px;
+            background-color: #1a5e92;
+            position: absolute;
+            top: 36px;
+            bottom: 6px;
+            left: 6px;
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+        }
+        #interface-video>.content>.float-left .top {
+            height: 30px;
+            color: white;
+            line-height: 30px;
+            text-align: center;
+            font-size: 13px;
+        }
+        #interface-video>.content>.float-left .top span {
+            color: white;
+        }
+        #interface-video>.content>.float-left .ul-wrap {
+            position: absolute;
+            top: 30px;
+            bottom: 30px;
+            left: 1px;
+            right: 1px;
+            background-color: #fafafa;
+            overflow: auto;
+        }
+        #interface-video>.content>.float-left .ul-wrap li {
+            height: 50px;
+            overflow: hidden;
+        }
+        #interface-video>.content>.float-left .ul-wrap li:hover {
+            background-color: #f2f2f2;
+        }
+        #interface-video>.content>.float-left .ul-wrap li.active {
+            background-color: #dedede;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .img-wrap {
+            width: 34px;
+            height: 34px;
+            border-radius: 2px;
+            margin: 8px;
+            background-color: #4a4a4a;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .img-wrap img {
+            width: 34px;
+            height: 34px;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .name {
+            margin-top: 8px;
+            font-size: 13px;
+            line-height: 14px;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .float-right {
+            width: 26px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .float-right {
+            line-height: 50px;
+            width: 26px;
+            height: 50px;
+            text-align: center;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .video {
+            padding-left: -1px;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .video.active {
+            background-color: #1a5e92;
+            color: white;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .close {
+            font-size: 12px;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .close:hover {
+            background-color: #f45454;
+            color: white;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .hover-blue:hover {
+            background-color: #1a5e92;
+            color: white;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .video.active {
+            background-color: #1a5e92;
+            color: white;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .small-video {
+            width: 225px;
+            height: 121px;
+            background-color: #808080;
+            margin-left: 9px;
+        }
+        #interface-video>.content>.float-left .ul-wrap li .small-video video {
+            width: 100%;
+            height: 100%;
+        }
+        #interface-video>.content>.float-left .add-people {
+            height: 30px;
+            width: 254px;
+            color: white;
+            line-height: 30px;
+            text-align: center;
+            font-size: 13px;
+            position: absolute;
+            bottom: 0;
+            background-color: #1a5e92;
+            border-radius: 0 0 3px 3px;
+            cursor: pointer;
+            transition: .2s;
+        }
+        #interface-video>.content>.float-left .add-people:hover {
+            background-color: #2073b2;
+        }
+
+		/*视频会商窗口*/
+        #interface-video>.content>.video-wrap {
+            position: absolute;
+            top: 36px;
+            left: 263px;
+            right: 3px;
+            bottom: 6px;
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+        }
+        #interface-video>.content>.video-wrap .meeting-name {
+            padding-left: 20px;
+        }
+        #interface-video>.content>.video-wrap .meeting-name .name {
+            color: #cccccc;
+            font-size: 20px;
+        }
+        #interface-video>.content>.video-wrap .meeting-name .describe {
+            color: #808080;
+            font-size: 13px;
+        }
+        #interface-video>.content>.video-wrap .video-window {
+            position: absolute;
+            top: 67px;
+            left: 0;
+            right: 0;
+            bottom: 49px;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul {
+            width: 100%;
+            height: 100%;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li{
+            padding: 3px;
+            width: 33.3%;
+            height: 33.3%;
+            float: left;
+            position: relative;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li:nth-child(1) {
+            width: 66.6%;
+            height: 66.59%;
+        }
+        #interface-video>.content>.video-wrap .video-window>.one-video>li:nth-child(1) {
+            width: 100%;
+            height: 100%;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li>div {
+            position: absolute;
+            color: white;
+            z-index: 1;
+            cursor: pointer;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li:nth-child(1) .request-voice {
+            background-color: #1a5e92;
+            border-radius: 2px;
+            padding-left: 3px;
+            padding-right: 3px;
+            right: 38px;
+            bottom: 10px;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li:nth-child(1) .request-voice span {
+            color: white;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .place {
+            top: 9px;
+            left: 9px;
+            background-color: #565656;
+            padding-left: 2px;
+            padding-right: 4px;
+            border-radius: 2px;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .place .name {
+            color: white;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .place:hover {
+            opacity: .8;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .place .icon {
+            color: white;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .full-or-min {
+            right: 12px;
+            bottom: 7px;
+            font-size: 16px;
+            display: none;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .full-or-min.active {
+            display: block;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li>.full-or-min:hover {
+            color: #cccccc;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .set {
+            left: 5px;
+            bottom: 7px;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .set>div {
+            font-family: iconfont;
+            float: left;
+            margin-left: 6px;
+            color: white;
+            font-size: 16px;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .set>div:hover {
+            color: #cccccc;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .set .mute {
+            display: none;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .one-video-wrap {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            right: 3px;
+            bottom: 3px;
+            background-color: #808080;
+            border: 1px solid white;
+            z-index: 0;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>.none-video>div {
+            display: none!important;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>.none-video>.one-video-wrap {
+            display: block!important;
+            border: 1px dashed white;
+            background-color: rgba(0,0,0,0);
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li .one-video-wrap.active {
+            border: 2px solid #1a5e92;
+        }
+        #interface-video>.content>.video-wrap .video-window>ul>li video {
+            width: 100%;
+            height: 100%;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap {
+            position: absolute;
+            bottom: 6px;
+            left: 0;
+            right: 0;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .float-left {
+            color: white;
+            line-height: 26px;
+            margin-left: 10px;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .float-left span {
+            margin-left: 10px;
+            color: white;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .float-right {
+            width: 125px;
+            height: 26px;
+            background-color: #ffffff;
+            cursor: pointer;
+            text-align: center;
+            margin-right: 6px;
+            border-radius: 2px;
+            line-height: 26px;
+            margin-bottom: 2px;
+            transition: .2s;
+            padding-right: 5px;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .float-right .icon {
+            font-size: 14px;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .float-right.close {
+            background-color: #f45454;
+            color: white;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .float-right.close .icon {
+            color: white;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .float-right.close:hover {
+            background-color: #d64949;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .float-right:hover {
+            background-color: #e9e9e9;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .float-right.stop {
+            display: none;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .shield.active {
+            background-color: #1a5e92;
+            color: white;
+        }
+        #interface-video>.content>.video-wrap>.btn-wrap .shield.active .icon {
+            color: white;
+        }
+		/*一个视频的时候的样式*/
+        #interface-video>.content>.video-wrap .video-window>ul>li.one-video {
+            width: 100%;
+            height: 100%;
+        }
+		/*单个视频全屏的css*/
+        #interface-video.full-active>.content>.video-wrap {
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        #interface-video.full-active>.content>.video-wrap>.video-window {
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        #interface-video.full-active>.content>.video-wrap>.video-window>ul {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        #interface-video.full-active>.content>.video-wrap>.video-window>ul>li.full-active {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+        }
+		/*视频参数设置弹窗*/
+        .panel-title {
+            font-size: 16px;
+            padding-left: 37px;
+            font-weight: normal;
+        }
+        .video-setting-dialog {
+            padding-left: 37px;
+            padding-top: 5px;
+            display: none;
+        }
+        .video-setting-dialog>div{
+            height: 36px;
+            margin-top: 15px;
+        }
+        .video-setting-dialog>div .text {
+            margin-top: 8px;
+        }
+        .video-setting-dialog>div .checkbox-wrap {
+            margin-top: 9px;
+            margin-left: 6px;
+        }
+        .video-setting-dialog>div>div {
+            float: left;
+        }
+        .video-setting-dialog>div>div .textbox {
+            width: 164px;
+            height: 36px;
+            border-radius: 3px;
+            padding-left: 5px;
+            line-height: 36px;
+        }
+        .video-setting-dialog>div>div input {
+            width: 164px;
+            height: 36px;
+            border: 1px solid #e5e5e5;
+            border-radius: 3px;
+            padding-left: 5px;
+            line-height: 36px;
+        }
+        .video-setting-dialog>div>.select-wrap {
+            margin-left: 6px;
+        }
+        .video-setting-dialog>.btn-wrap>div {
+            float: right;
+            width: 65px;
+            height: 20px;
+            text-align: center;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .video-setting-dialog>.btn-wrap>div:hover {
+            opacity: .85;
+        }
+        .video-setting-dialog>.btn-wrap>.cancel {
+            line-height: 18px;
+            border: 1px solid #e5e5e5;
+            margin-right: 10px;
+        }
+        .video-setting-dialog>.btn-wrap>.sure {
+            line-height: 20px;
+            background-color: #24629f;
+            color: white;
+            margin-right: 37px;
+        }
+        .video-setting-dialog .textbox-text {
+            height: 36px!important;
+        }
+        .video-setting-dialog .textbox-icon {
+            height: 36px!important;
+        }
+ 		/*关闭视频会商弹窗*/
+        .is-closed-dialog {
+            display: none;
+        }
+        .is-closed-dialog .text {
+            height: 110px;
+            font-size: 14px;
+            line-height: 110px;
+            text-align: center;
+        }
+        .is-closed-dialog .btn-wrap {
+            height: 49px;
+            background-color: #f1f1f1;
+        }
+        .is-closed-dialog .btn-wrap div {
+            float: left;
+            font-size: 14px;
+            text-align: center;
+            height: 23px;
+            border-radius: 2px;
+            border: 1px solid #cecece;
+            line-height: 21px;
+            margin-top: 13px;
+            cursor: pointer;
+        }
+        .is-closed-dialog .btn-wrap div:hover {
+            opacity: .8;
+        }
+        .is-closed-dialog .btn-wrap .cancel {
+            width: 56px;
+            margin-left: 107px;
+        }
+        .is-closed-dialog .btn-wrap .sure {
+            width: 80px;
+            background-color: #ed464c;
+            color: white;
+            margin-left: 26px;
+        }
+    </style>
+</head>
+<body>
+<div id="interface-video-wrap">
+    <div id="interface-video">
+        <div class="top-bar clearfix">
+            <div class="float-right full-screen">全屏</div>
+            <div class="float-right minimum">最小化</div>
+            <div class="float-left icon">&#xe64e 视频会商</div>
+        </div>
+        <div class="content">
+            <div class="float-left">
+                <div class="top">会议人员列表(<span>12</span>)</div>
+                <div class="ul-wrap">
+                    <ul>
+                        <li>
+                            <div class="clearfix">
+                                <div class="float-left img-wrap"><img src="" alt=""></div>
+                                <div class="float-left">
+                                    <div class="name"><span class="icon"></span> 1</div>
+                                    <div class="id">1</div>
+                                </div>
+                                <div class="float-right icon close">&#xe689</div>
+                                <div class="float-right icon hover-blue go active">&#xe6b7</div>
+                                <div class="float-right icon hover-blue video">&#xe62d</div>
+                                <div class="float-right icon hover-blue voice">&#xe834</div>
+                            </div>
+                            <div class="small-video"><video src=""></video></div>
+                        </li>
+                        <li>
+                            <div class="clearfix">
+                                <div class="float-left img-wrap"><img src="" alt=""></div>
+                                <div class="float-left">
+                                    <div class="name"><span class="icon"></span>2</div>
+                                    <div class="id">2</div>
+                                </div>
+                                <div class="float-right icon close">&#xe689</div>
+                                <div class="float-right icon hover-blue go">&#xe6b8</div>
+                                <div class="float-right icon hover-blue video">&#xe62d</div>
+                                <div class="float-right icon hover-blue voice">&#xe834</div>
+                            </div>
+                            <div class="small-video"></div>
+                        </li>
+                        <li>
+                            <div class="clearfix">
+                                <div class="float-left img-wrap"><img src="" alt=""></div>
+                                <div class="float-left">
+                                    <div class="name"><span class="icon"></span>3</div>
+                                    <div class="id">3</div>
+                                </div>
+                                <div class="float-right icon close">&#xe689</div>
+                                <div class="float-right icon hover-blue go">&#xe6b8</div>
+                                <div class="float-right icon hover-blue video">&#xe62d</div>
+                                <div class="float-right icon hover-blue voice">&#xe834</div>
+                            </div>
+                            <div class="small-video"><video src=""></video></div>
+                        </li>
+                        <li>
+                            <div class="clearfix">
+                                <div class="float-left img-wrap"><img src="" alt=""></div>
+                                <div class="float-left">
+                                    <div class="name"><span class="icon"></span>4</div>
+                                    <div class="id">4</div>
+                                </div>
+                                <div class="float-right icon close">&#xe689</div>
+                                <div class="float-right icon hover-blue go">&#xe6b8</div>
+                                <div class="float-right icon hover-blue video">&#xe62d</div>
+                                <div class="float-right icon hover-blue voice">&#xe834</div>
+                            </div>
+                            <div class="small-video"></div>
+                        </li>
+                        <li>
+                            <div class="clearfix">
+                                <div class="float-left img-wrap"><img src="" alt=""></div>
+                                <div class="float-left">
+                                    <div class="name"><span class="icon"></span>5</div>
+                                    <div class="id">5</div>
+                                </div>
+                                <div class="float-right icon close">&#xe689</div>
+                                <div class="float-right icon hover-blue go">&#xe6b8</div>
+                                <div class="float-right icon hover-blue video">&#xe62d</div>
+                                <div class="float-right icon hover-blue voice">&#xe834</div>
+                            </div>
+                            <div class="small-video"><video src=""></video></div>
+                        </li>
+                        <li>
+                            <div class="clearfix">
+                                <div class="float-left img-wrap"><img src="" alt=""></div>
+                                <div class="float-left">
+                                    <div class="name"><span class="icon"></span>6</div>
+                                    <div class="id">6</div>
+                                </div>
+                                <div class="float-right icon close">&#xe689</div>
+                                <div class="float-right icon hover-blue go">&#xe6b8</div>
+                                <div class="float-right icon hover-blue video">&#xe62d</div>
+                                <div class="float-right icon hover-blue voice">&#xe834</div>
+                            </div>
+                            <div class="small-video"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="icon add-people">
+                    &#xe67d  追加会议人员
+                </div>
+            </div>
+            <div class="video-wrap">
+                <div class="meeting-name">
+                    <div class="name">视频会议名字</div>
+                    <div class="describe">潇洒撒打算打算</div>
+                </div>
+                <div class="video-window">
+                    <ul>
+                        <li>
+                            <div class="place" title="点此上主会场">
+                                <span class="icon">&#xe64b</span>
+                                <span class="name">1</span>
+                                <span class="id" style="color: white">1</span>
+                            </div>
+                            <div class="icon full-or-min full-screen active" title="全屏">&#xe69b</div>
+                            <div class="icon full-or-min min-screen" title="还原">&#xe698</div>
+                            <div class="request-voice"><span class="name">谁谁谁</span><span>请求发言</span></div>
+                            <div class="set">
+                                <div title="视频参数设置" class="video-setting">&#xe601</div>
+                                <div class="out" title="移出会场">&#xe6b8</div>
+                                <div class="voice" title="静音">&#xe834</div>
+                                <div class="mute" title="取消静音">&#xe66d</div>
+                            </div>
+                            <div class="one-video-wrap">
+                                <video src=""></video>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="place" title="点此上主会场">
+                                <span class="icon">&#xe64b</span>
+                                <span class="name">莫莫莫1</span>
+                                <span class="id" style="color: white">8787f878</span>
+                            </div>
+                            <div class="icon full-or-min full-screen active" title="全屏">&#xe69b</div>
+                            <div class="icon full-or-min min-screen" title="还原">&#xe698</div>
+                            <div class="set">
+                                <div title="视频参数设置" class="video-setting">&#xe601</div>
+                                <div class="out" title="移出会场">&#xe6b7</div>
+                                <div class="voice" title="静音">&#xe834</div>
+                                <div class="mute" title="取消静音">&#xe66d</div>
+                            </div>
+                            <div class="one-video-wrap">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="place" title="点此上主会场">
+                                <span class="icon">&#xe64b</span>
+                                <span class="name">莫莫莫1</span>
+                                <span class="id" style="color: white">8787f878</span>
+                            </div>
+                            <div class="icon full-or-min full-screen active" title="全屏">&#xe69b</div>
+                            <div class="icon full-or-min min-screen" title="还原">&#xe698</div>
+                            <div class="set">
+                                <div title="视频参数设置" class="video-setting">&#xe601</div>
+                                <div class="out" title="移出会场">&#xe6b7</div>
+                                <div class="voice" title="静音">&#xe834</div>
+                                <div class="mute" title="取消静音">&#xe66d</div>
+                            </div>
+                            <div class="one-video-wrap">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="place" title="点此上主会场">
+                                <span class="icon">&#xe64b</span>
+                                <span class="name">莫莫莫1</span>
+                                <span class="id" style="color: white">8787f878</span>
+                            </div>
+                            <div class="icon full-or-min full-screen active" title="全屏">&#xe69b</div>
+                            <div class="icon full-or-min min-screen" title="还原">&#xe698</div>
+                            <div class="set">
+                                <div title="视频参数设置" class="video-setting">&#xe601</div>
+                                <div class="out" title="移出会场">&#xe6b7</div>
+                                <div class="voice" title="静音">&#xe834</div>
+                                <div class="mute" title="取消静音">&#xe66d</div>
+                            </div>
+                            <div class="one-video-wrap">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="place" title="点此上主会场">
+                                <span class="icon">&#xe64b</span>
+                                <span class="name">莫莫莫1</span>
+                                <span class="id" style="color: white">8787f878</span>
+                            </div>
+                            <div class="icon full-or-min full-screen active" title="全屏">&#xe69b</div>
+                            <div class="icon full-or-min min-screen" title="还原">&#xe698</div>
+                            <div class="set">
+                                <div title="视频参数设置" class="video-setting">&#xe601</div>
+                                <div class="out" title="移出会场">&#xe6b7</div>
+                                <div class="voice" title="静音">&#xe834</div>
+                                <div class="mute" title="取消静音">&#xe66d</div>
+                            </div>
+                            <div class="one-video-wrap">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="place" title="点此上主会场">
+                                <span class="icon">&#xe64b</span>
+                                <span class="name">莫莫莫1</span>
+                                <span class="id" style="color: white">8787f878</span>
+                            </div>
+                            <div class="icon full-or-min full-screen active" title="全屏">&#xe69b</div>
+                            <div class="icon full-or-min min-screen" title="还原">&#xe698</div>
+                            <div class="set">
+                                <div title="视频参数设置" class="video-setting">&#xe601</div>
+                                <div class="out" title="移出会场">&#xe6b7</div>
+                                <div class="voice" title="静音">&#xe834</div>
+                                <div class="mute" title="取消静音">&#xe66d</div>
+                            </div>
+                            <div class="one-video-wrap">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="btn-wrap">
+                    <div class="float-left icon">
+                        &#xe696 会议持续时间: <span>1:23:56</span>
+                    </div>
+                    <div class="float-right close"><span class="icon">&#xe671</span> 结束视频会商</div>
+                    <div class="float-right"><span class="icon">&#xe6c9</span> 发送会议通知</div>
+                    <div class="float-right open"><span class="icon">&#xe834</span> 开放全员发言</div>
+                    <div class="float-right stop"><span class="icon">&#xe66d</span> 禁止全员发言</div>
+                    <div class="float-right shield"><span class="icon">&#xe6ab</span> 私密通话</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="video-gif">
+        <img src="../img/videoConfer.gif" alt="">
+    </div>
+</div>
+
+
+<!--视频设置弹窗-->
+<div class="video-setting-dialog">
+    <div>
+        <div class="text">导航开关 :</div>
+        <div class="checkbox-wrap">
+            <label><input type="checkbox" class="checkbox"><span class="checkSpan"></span></label>
+        </div>
+    </div>
+    <div>
+        <div class="text">分辨率 :</div>
+        <div class="select-wrap">
+            <select class="easyui-combobox" name="resolution" panelHeight="auto" style="width:164px;"></select>
+        </div>
+    </div>
+    <div>
+        <div class="text">帧<span style="opacity: 0">是</span>率 :</div>
+        <div class="select-wrap">
+            <select class="easyui-combobox" name="framerate" panelHeight="auto" style="width:164px;"></select>
+        </div>
+    </div>
+    <div class="btn-wrap"><div class="sure">确定</div><div class="cancel">取消</div></div>
+</div>
+
+
+<!--关闭视频会商弹窗-->
+<div class="is-closed-dialog">
+    <div class="text">是否确认结束视频会商</div>
+    <div class="btn-wrap">
+        <div class="cancel">取消</div>
+        <div class="sure">确定结束</div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+	//左边列表
+    var $leftLi = $('#interface-video>.content>.float-left .ul-wrap li');
+  	//左边列表的静音
+	$leftLi.find('.voice').on('click', function () {
+        if(!$(this).hasClass('active')){
+            $(this).html('&#xe66d');
+            $(this).addClass('active')
+        }else{
+            $(this).html('&#xe834');
+            $(this).removeClass('active')
+        }
+    });   
+	//左边列表的视频展开收回
+  	$leftLi.find('.video').on('click', function () {
+        console.log(1);
+        if(!$(this).hasClass('active')){
+            console.log(2);
+            $(this).addClass('active');
+            $(this).parent().parent().animate({height: 180})
+        }else{
+            $(this).removeClass('active');
+            $(this).parent().parent().animate({height: 50})
+        }
+    });   
+  	//视频的移入移出
+	$leftLi.find('.go').on('click', function () {
+        if(!$(this).hasClass('active')){
+            if($('#interface-video>.content>.video-wrap .video-window>ul video').length < 6){
+                $(this).html('&#xe6b7');
+                $(this).addClass('active');
+                var theName = $(this).parent().parent().find('.name').text();
+                var theID = $(this).parent().parent().find('.id').text();
+                var theSrc = $(this).parent().parent().find('video').attr('src');
+                appendVideo(theName, theID, theSrc);
+                judgeHost();
+            }else {
+                alert('最多只能上6个视频');
+            }
+        }else{
+           if($('#interface-video>.content>.video-wrap .video-window>ul video').length > 1){
+               $(this).html('&#xe6b8');
+               $(this).removeClass('active');
+               var id =$(this).parent().parent().find('.id').text();
+               $.each($('#interface-video>.content>.video-wrap .video-window>ul>li'), function () {
+                   var thisId = $(this).find('.place .id').text();
+                   if(thisId === id){
+                       $(this).remove();
+                       $('#interface-video>.content>.video-wrap .video-window>ul').append('<li><div class="one-video-wrap"></div></li>');
+                   }
+               });
+               $(this).parent().parent().find('.name .icon').html('');
+               videoInterfaceInit()
+           }else{
+               alert('场上最少得有一个视频')
+           }
+        }
+    });
+    function leftLicLick() {
+        $leftLi = $('#interface-video>.content>.float-left .ul-wrap li');
+        $leftLi.on('click', function () {
+            $leftLi.removeClass('active');
+            $(this).addClass('active')
+        });
+    }
+
+
+	//右边视频界面
+    var $videoLi = $('#interface-video>.content>.video-wrap .video-window>ul>li');
+    var $videoBtn = $('#interface-video>.content>.video-wrap>.btn-wrap');
+    var startIndex = 0;
+    var endIndex =0;
+    function fullScreen() {
+        $('#interface-video>.top-bar>.full-screen ').on('click', function () {
+            if(!$(this).hasClass('active')){
+                console.log('全屏');
+                $('#interface-video').addClass('full-screen-active');
+                $(this).html('还原');
+                $(this).addClass('active')
+            }else{
+                console.log('还原');
+                $('#interface-video').removeClass('full-screen-active');
+                $(this).html('全屏');
+                $(this).removeClass('active')
+            }
+        });
+    }
+    function listExchange() {
+        $videoLi.on('click', '.one-video-wrap', function () {
+            $videoLi.find('.one-video-wrap').removeClass('active');
+            $(this).addClass('active')
+        });
+        $videoLi.find('.place').on('click', function () {
+            if(!($(this).parent().index() === 0)){
+                $('#interface-video>.content>.video-wrap .video-window>ul>li').eq(0).find('.place .icon').html('&#xe64b');
+                $(this).find('.icon').html('&#xe695');
+                $('#interface-video>.content>.video-wrap .video-window>ul>li').eq(0).before($(this).parent());
+                judgeHost()
+            }
+        });
+    }
+    function minum() {
+        $('#interface-video .top-bar .minimum').on('click', function () {
+            $('#interface-video').fadeOut(function () {
+                $('#interface-video-wrap .video-gif').addClass('active');
+            });
+        });
+        $('#interface-video-wrap .video-gif').on('click', function () {
+            $('#interface-video-wrap .video-gif').removeClass('active');
+            $('#interface-video').fadeIn();
+        });
+    }
+    function oneVideoFullOrMin() {
+        $videoLi.find('.full-screen').on('click', function () {
+            $(this).removeClass('active');
+            $(this).parent().addClass('full-active');
+            $('#interface-video').addClass('full-active');
+            $(this).parent().find('.min-screen').addClass('active')
+        });
+        $videoLi.find('.min-screen').on('click', function () {
+            $(this).removeClass('active');
+            $('#interface-video').removeClass('full-active');
+            $(this).parent().removeClass('full-active');
+            $videoLi.find('.full-screen').addClass('active')
+        });
+    }
+    function voiceMute() {
+        $videoLi.find('.voice').on('click', function () {
+            $(this).css('display', 'none');
+            $(this).parent().find('.mute').css('display', 'block')
+        });
+        $videoLi.find('.mute').on('click', function () {
+            $(this).css('display', 'none');
+            $(this).parent().find('.voice').css('display', 'block')
+        });
+    }
+    function move() {
+    	 $videoLi.on('mousedown', function () {
+             startIndex = $(this).index();
+         });
+         $videoLi.on('mouseup', function () {
+             endIndex = $(this).index();
+             if(startIndex===0 && $(this).find('video').length === 0){
+                 alert('主场位置不能为空')
+             }else {
+                 var $startLi = $('#interface-video>.content>.video-wrap .video-window>ul>li').eq(startIndex);
+                 $('#interface-video>.content>.video-wrap .video-window>ul>li').eq(endIndex).after($startLi);
+                 $('#interface-video>.content>.video-wrap .video-window>ul>li').eq(startIndex).after($(this));
+                 $videoLi = $('#interface-video>.content>.video-wrap .video-window>ul>li');
+                 $.each($videoLi, function () {
+                     $(this).index()===0 ?
+                         $videoLi.eq(0).append('<div class="request-voice"><span class="name">谁谁谁</span><span>请求发言</span></div>')
+                         : $(this).find('.request-voice').remove() ;
+                 });
+                 judgeHost()
+             }
+         });
+    }
+    function btnFunction() {
+       $videoBtn.find('.open').on('click', function () {
+           $(this).css('display', 'none');
+           $videoBtn.find('.stop').css('display', 'block')
+       });
+       $videoBtn.find('.stop').on('click', function () {
+           $(this).css('display', 'none');
+           $videoBtn.find('.open').css('display', 'block')
+       });
+       $videoBtn.find('.shield').on('click', function () {
+           if($(this).hasClass('active')){
+               $(this).removeClass('active')
+           }else{
+               $(this).addClass('active')
+           }
+       });
+   }
+    function videoType() {
+        $videoLi = $('#interface-video>.content>.video-wrap .video-window>ul>li');
+        var videoLength = $('#interface-video>.content>.video-wrap .video-window>ul video').length;
+        if(1 < videoLength){
+            $videoLi.removeClass('one-video');
+            $.each($videoLi, function () {
+                if(!($(this).index() === 0)){
+                    $(this).css('display', 'block')
+                }
+            })
+        }else{
+            $videoLi.addClass('one-video');
+            $.each($videoLi, function () {
+                if(!($(this).index() === 0)){
+                    $(this).css('display', 'none')
+                }
+            })
+        }
+    }
+    function isNoVideo() {
+        $videoLi = $('#interface-video>.content>.video-wrap .video-window>ul>li');
+        $.each($videoLi, function () {
+            if(!$(this).find('video').length){
+                $(this).addClass('none-video')
+            }else{
+                $(this).removeClass('none-video')
+            }
+        })
+    }
+    function judgeHost() {
+        $videoLi = $('#interface-video>.content>.video-wrap .video-window>ul>li');
+        $.each($videoLi, function () {
+            var mainId;
+            var otherId;
+            if($(this).index() === 0){
+                $(this).find('.place .icon').html('&#xe695');
+                $(this).find('.out').css('display', 'none');
+                mainId =$(this).find('.place .id').text();
+                $.each($('#interface-video>.content>.float-left .ul-wrap li'), function () {
+                    var thisId = $(this).find('.id').text();
+                    if(thisId === mainId){
+                        $(this).find('.name .icon').html('&#xe695')
+                    }
+                })
+            }else{
+                $(this).find('.place .icon').html('&#xe64b');
+                $(this).find('.out').css('display', 'block');
+                otherId =$(this).find('.place .id').text();
+                $.each($('#interface-video>.content>.float-left .ul-wrap li'), function () {
+                    var thisId = $(this).find('.id').text();
+                    if(thisId === otherId){
+                        $(this).find('.name .icon').html('&#xe64b')
+                    }
+                })
+            }
+        })
+    }
+    function videoOut() {
+        $('#interface-video>.content>.video-wrap .video-window>ul>li .set .out').on('click', function () {
+            $videoLi = $('#interface-video>.content>.video-wrap .video-window>ul>li');
+            var id =$(this).parent().parent().find('.place .id').text();
+            $(this).parent().parent().remove();
+            $('#interface-video>.content>.video-wrap .video-window>ul').append('<li><div class="one-video-wrap"></video></div></li>');
+            $.each($('#interface-video>.content>.float-left .ul-wrap li'), function () {
+                var thisId = $(this).find('.id').text();
+                if(thisId === id){
+                    $(this).find('.name .icon').html('');
+                    $(this).find('.go').html('&#xe6b8').removeClass('active');
+                }
+            });
+            isNoVideo();
+            videoType();
+            move();
+        });
+    }
+    function videoCondfig() {
+       $('.video-setting').on('click',function () {
+        $('.video-setting-dialog').dialog({
+            title: '视频参数设置',
+            width: 288,
+            height: 265,
+            closed: false,
+            cache: false,
+            modal: true
+        });
+    });
+    }
+    function videoInterfaceInit() {
+        isNoVideo();                   //根据调用视频的数目分出有无video的li
+        videoType();                   //根据调用视频的数目判断窗口的大小
+        listExchange();                //点击上主会场
+        oneVideoFullOrMin();           //单个视频最大化还原
+        voiceMute();                   //视频静音
+        btnFunction();                 //开启私密通话和开发全员发言
+        judgeHost();                   //根据右边视频的主次场，判断左边列表的icon
+        videoOut();                    //视频移出会场
+        videoCondfig();                //视频参数设置弹窗
+        leftLicLick();                 //左边栏li的click效果
+    }
+    move();                        //视频拖拽
+    fullScreen();                  //全屏还原
+    minum();                       //视频会商最小化
+    videoInterfaceInit();
+
+    function appendVideo(name, id, src) {
+        $videoLi = $('#interface-video>.content>.video-wrap .video-window>ul>li');
+        var videoLength = $('#interface-video>.content>.video-wrap .video-window>ul video').length;
+        var content = '<div class="place" title="点此上主会场">\n' +
+            '              <span class="icon">&#xe64b</span>\n' +
+            '              <span class="name">'+ name +'</span>\n' +
+            '              <span class="id" style="color: white">'+ id +'</span>\n' +
+            '          </div>\n' +
+            '          <div class="icon full-or-min full-screen active" title="全屏">&#xe69b</div>\n' +
+            '          <div class="icon full-or-min min-screen" title="还原">&#xe698</div>\n' +
+            '          <div class="set">\n' +
+            '              <div title="视频参数设置" class="video-setting">&#xe601</div>\n' +
+            '              <div class="out" title="移出会场">&#xe6b7</div>\n' +
+            '              <div class="voice" title="静音">&#xe834</div>\n' +
+            '              <div class="mute" title="取消静音">&#xe66d</div>\n' +
+            '          </div>\n' +
+            '          <div class="one-video-wrap">\n' +
+            '              <video src='+ src +'></video>\n' +
+            '          </div>';
+        if(videoLength < 6){
+            $.each($videoLi, function () {
+                if($(this).find('video').length === 0){
+                    console.log($(this).index());
+                    $('#interface-video>.content>.video-wrap .video-window>ul>li').eq($(this).index()).html(content);
+                    $('#interface-video>.content>.video-wrap .video-window>ul>li .set .out').off('click');
+                    videoInterfaceInit();
+                    return false
+                }
+            });
+        }else{
+            alert('最多只能上6个视频');
+        }
+    }
+
+
+//结束视频会商弹窗
+    $('#interface-video>.content>.video-wrap>.btn-wrap .float-right.close').on('click',function () {
+        $('.is-closed-dialog').dialog({
+            title: '结束视频会商',
+            width: 376,
+            height: 202,
+            closed: false,
+            cache: false,
+            modal: true
+        });
+    });
+
+
+
+</script>
+</body>
+</html>

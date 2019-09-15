@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="jq/jquery.min.js"></script>
+<script src="jq/jquery.easyui-1.5.1.min.js"></script>
+<link rel="stylesheet" href="src/iconfont/iconfont.css">
+<link rel="stylesheet" href="jq/themes/insdep/easyui.css">
+<link rel="stylesheet" href="jq/themes/insdep/icon.css">
+<link rel="stylesheet" href="jq/themes/insdep/iconfont/demo.css">
+<body>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: "Microsoft YaHei Light";
+    }
+    body{
+        background-color: black;
+    }
+    .lf-bot-bt{
+        position: absolute;
+        left:50px;
+        bottom:50px;
+        z-index:100;
+        width:100px;
+        height:26px;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        background-color: white;
+        cursor: pointer;
+    }
+    .lf-bot-bt .iconfont{
+        width:26px;
+        height:24px;
+        background-color:#eeeeee;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 23px;
+        margin:1px 1px 2px 1px;
+        border-radius: 2px;
+    }
+    .lf-bot-bt.hideOffline{
+        bottom:86px;
+    }
+
+    .lf-bot-bt.hideOffline:hover{
+        background-color: #9a2929;
+    }
+    .lf-bot-bt.hideOffline:hover .iconfont{
+        background-color: #dcdcdc;
+    }
+    .lf-bot-bt .hideOffline-inner
+    {
+        background-color: #f45454;
+        width:71px;
+        height:24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color:white;
+        border-radius: 2px;
+    }
+    .lf-bot-bt.hideOffline:hover .hideOffline-inner{
+        background-color: #df4a4a;
+    }
+    .lf-bot-bt.hideOffline.toggled:hover{
+        background-color: #11486f;
+    }
+    .lf-bot-bt.hideOffline.toggled:hover .iconfont{
+        background-color: #dcdcdc;
+    }
+    .lf-bot-bt.hideOffline.toggled:hover .hideOffline-inner{
+        background-color: #1e77b7;
+    }
+
+    .lf-bot-bt.showNocustoms.toggled{
+        display: none;
+    }
+    .lf-bot-bt.hideOffline.toggled{
+        display: none;
+    }
+    .lf-bot-bt.showNocustoms.toggled.active{
+        display: flex;
+    }
+    .lf-bot-bt.hideOffline.toggled.active{
+        display: flex;
+    }
+    .lf-bot-bt.showNocustoms.active{
+        display: none;
+    }
+    .lf-bot-bt.hideOffline.active{
+        display: none;
+    }
+
+    .lf-bot-bt.toggled .hideOffline-inner{
+        background-color: #2585cb;
+    }
+    .lf-bot-bt.toggled .showNocustoms-inner{
+        background-color: #f45454;
+    }
+
+
+    .showNocustoms:hover{
+        background-color: #11486f;
+    }
+
+    .showNocustoms:hover .iconfont{
+        background-color: #dcdcdc;
+    }
+    .showNocustoms:hover .showNocustoms-inner{
+        background-color: #1e77b7;
+    }
+    .showNocustoms.toggled:hover{
+        background-color: #9a2929;
+    }
+    .showNocustoms.toggled:hover .iconfont{
+        background-color: #dcdcdc;
+    }
+    .showNocustoms.toggled:hover showNocustoms-inner{
+        background-color: #df4a4a;
+    }
+    .showNocustoms.toggled .showNocustoms-inner{
+        background-color:#f45454;
+    }
+
+    .lf-bot-bt .showNocustoms-inner{
+        background-color: #2585cb;
+        width:71px;
+        height:24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color:white;
+        border-radius: 2px;
+    }
+</style>
+<div class="lf-bot-bt hideOffline">
+    <div class="iconfont">&#xe6cd;</div>
+    <div class="hideOffline-inner">隐藏离线</div>
+</div>
+<div class="lf-bot-bt hideOffline toggled">
+    <div class="iconfont">&#xe6cf;</div>
+    <div class="hideOffline-inner">显示离线</div>
+</div>
+
+
+<div class="lf-bot-bt showNocustoms">
+    <div class="iconfont">&#xe6ce;</div>
+    <div class="showNocustoms-inner">显示非关</div>
+</div>
+<div class="lf-bot-bt showNocustoms toggled">
+    <div class="iconfont">&#xe6d0;</div>
+    <div class="showNocustoms-inner">隐藏非关</div>
+</div>
+<script>
+    $('.lf-bot-bt.hideOffline').on('click',()=> {
+        $('.lf-bot-bt.hideOffline.toggled').addClass('active')
+        $('.lf-bot-bt.hideOffline').addClass('active')
+    })
+    $('.lf-bot-bt.hideOffline.toggled').on('click',()=> {
+        $('.lf-bot-bt.hideOffline.toggled').removeClass('active')
+        $('.lf-bot-bt.hideOffline').removeClass('active')
+    })
+
+    $('.lf-bot-bt.showNocustoms').on('click',()=> {
+        $('.lf-bot-bt.showNocustoms.toggled').addClass('active')
+        $('.lf-bot-bt.showNocustoms').addClass('active')
+    })
+    $('.lf-bot-bt.showNocustoms.toggled').on('click',()=> {
+        $('.lf-bot-bt.showNocustoms.toggled').removeClass('active')
+        $('.lf-bot-bt.showNocustoms').removeClass('active')
+    })
+
+
+
+</script>
+</body>
+</html>

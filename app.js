@@ -11,7 +11,11 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// app.set('view engine', 'jade');
+var ejs = require('ejs');  //我是新引入的ejs插件
+app.engine('html', ejs.__express);
+app.set('view engine', 'html');
+
 
 app.use(logger('dev'));
 app.use(express.json());

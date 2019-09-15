@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="static/icon/chatsure.ico" type="image/x-icon" rel="shortcut icon"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>多媒体综合指挥调度平台 V2.0【登陆】</title>
+    <script type="text/javascript" src="static/canvas.js"></script>
+    <script type="text/javascript" src="static/EasyUI151/jquery.min.js"></script>
+    <script type="text/javascript" src="static/EasyUI151/jquery.cookie.js"></script>
+    <script type="text/javascript" src="static/EasyUI151/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="static/EasyUI151/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="static/EasyUI151/themes/insdep/jquery.insdep-extend.min.js"></script>
+    <script type="text/javascript" src="static/lang/comm-lang-load.js"></script>
+    <script type="text/javascript" src="static/js/prompt.js"></script>
+    <link rel="stylesheet" href="static/icon/iconfont.css">
+    <link rel="stylesheet" href="static/css/com.login.css">
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+<div id="loginInterface">
+    <canvas id="canvas" style="	width:97%;height:97%"></canvas>
+    <div class="rightTop">
+        <span class="setting">&#xe601;</span>
+        <span class="close">&#xe604;</span>
+    </div>
+    <form id="loginform" action="loginAuth" method="POST">
+        <div class="login">
+            <div class="logo" style="margin-bottom:0px;"><img src="static/img/logo.png" alt="" style="width:auto;height:180px;"/></div>
+            <p id="system_Title">融合通信指挥平台</p>
+            <div class="errmsg" id="errorMsg"></div>
+            <div class="inputText"><input type="text" class="username" name="num" id="num"><span class="icon">&#xe602;</span></div>
+            <div class="inputText"><input type="password" class="password" name="pwd" id="pwd"><span class="icon">&#xe603;</span></div>
+            <div class="checkboxWrap">
+                <div class="rememberPassword">
+                    <label>
+                        <input type="checkbox" class="checkbox" name="keepPwd" id="keepPwd">
+                        <span class="checkSpan"></span>
+                        <span>{{lang.login.SavePwd}}</span>
+                    </label>
+                </div>
+                <div class="savePassword">
+                    <label>
+                        <input type="checkbox" class="checkbox" name="autoLogin" id="autoLogin">
+                        <span class="checkSpan"></span>
+                        <span>{{lang.login.autoLogin}}</span>
+                    </label>
+                </div>
+            </div>
+            <div class="btn" id="btn_login">{{lang.login.Login}}</div>
+        </div>
+    </form>
+</div>
+<script>
+    //定义画布宽高和生成点的个数
+    var WIDTH = window.innerWidth, HEIGHT = window.innerHeight, POINT = 13;
+    var canvas = document.getElementById('canvas');
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+    var context = canvas.getContext('2d');
+    context.strokeStyle = 'rgba(255,255,255,0.02)';
+    context.strokeWidth = 1;
+    context.fillStyle = 'rgba(255,255,255,0.08)';
+    var circleArr = [];
+    var logoutFlag = "<%=logoutFlag%>";
+    $(function() {
+        //初始化系统图标及名称。
+        var systemImg=$.cookie('systemImg');
+        var systemName=$.cookie('systemName');
+        if (!systemImg || systemImg == '') systemImg = 'static/img/logo.png';
+        if (!systemName || systemName == '') systemName = lang.login.title;
+        $('.logo>img').attr('src',systemImg);
+        $('#system_Title').html(systemName);
+        $('title').text(systemName);
+        //页面背景动画。
+        init();
+        $("#num")[0].focus();
+        setInterval(function () {
+            for (var i = 0; i < POINT; i++) {
+                var cir = circleArr[i];
+                cir.x += cir.moveX;
+                cir.y += cir.moveY;
+                if (cir.x > WIDTH) cir.x = 0;
+                else if (cir.x < 0) cir.x = WIDTH;
+                if (cir.y > HEIGHT) cir.y = 0;
+                else if (cir.y < 0) cir.y = HEIGHT;
+            }
+            draw();
+        }, 16);
+        $("body").keypress(function (e){
+            var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+            if (keyCode == 13) {
+                if (!e || !e.target || !e.target.id) return;
+                if (e.target.id == 'num') {
+                    $("#pwd")[0].focus();
+                } else if (e.target.id == 'pwd') {
+                    doLogin();
+                } else {
+                    return;
+                }
+            }
+        });
+        //获取登陆页面当前表单中的值，并返回JSON对象。
+        function getVal(){
+            var vNum=$("#num").val();
+            var vPwd=$("#pwd").val();
+            var vKeepPwd=$("#keepPwd").is(':checked')?1:0;
+            var vAutoLogin=$("#autoLogin").is(':checked')?1:0;
+            var retObj={
+                num : vNum,
+                pwd : vPwd,
+                keepPwd : vKeepPwd,
+                autoLogin : vAutoLogin
+            };
+            return retObj;
+        }
+
+        //获取cookie值，并写入页面中。
+        function getCookie(){
+            var vNum=$.cookie('num');
+            var vPwd=$.cookie('pwd');
+            var vKeepPwd=$.cookie('keepPwd');
+            var vAutoLogin=$.cookie('autoLogin');
+            $("#num").val(vNum);
+            $("#pwd").val(vPwd);
+            if (vKeepPwd=='1'){
+                $("#keepPwd").prop("checked",true);
+            }
+            if (vAutoLogin=='1'){
+                //根据相关cookie值，判断是否需要自动登陆。如果需要自动登陆，则直接进行登陆与跳转操作。
+                $("#autoLogin").prop("checked",true);
+                if (logoutFlag!='1'){
+                    doLogin();
+                }
+            }
+        }
+
+        function doLogin(){
+            //获取并检查登陆页面是否录入用户名与密码等信息。
+            var logInfoVal=getVal();
+            if (logInfoVal.num=='') {
+                $("#errorMsg").text('请输入用户名。');
+                return;
+            } else if (logInfoVal.pwd=='') {
+                $("#errorMsg").text('请输入密码。');
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "loginAuth",
+                data: logInfoVal,
+                dataType: "json",
+                success: function(data){
+                    if(data.success == 'SUCCESS'){
+                        //根据是否保存密码来决定是否将相关值写入cookie。
+                        if (logInfoVal.keepPwd=='1'){//保存cookie值。
+                            $.cookie('num', logInfoVal.num, { expires: 366 });
+                            $.cookie('pwd', logInfoVal.pwd, { expires: 366 });
+                            $.cookie('keepPwd', logInfoVal.keepPwd, { expires: 366 });
+                            $.cookie('autoLogin', logInfoVal.autoLogin, { expires: 366 });
+                        }else{//删除cookie值。
+                            $.removeCookie('num');
+                            $.removeCookie('pwd');
+                            $.removeCookie('keepPwd');
+                            $.removeCookie('autoLogin');
+                        }
+                        window.top.location.href='main';
+                    }else{
+                        $("#errorMsg").text(data.msg);
+                    }
+                }
+            });
+        }
+
+        //获取cookie值，并写入页面中。
+        //根据相关cookie值，判断是否需要自动登陆。如果需要自动登陆，则直接进行登陆与跳转操作。
+        getCookie();
+
+        //登陆按钮功能。
+        $("#btn_login").click(function(){
+            doLogin();
+        });
+
+        //如果不保存密码，则不能自动登陆。
+        $("#keepPwd").change(function() {
+            var chkPwdVal=$(this).is(':checked');
+            var chkAtlVal=$("#autoLogin").is(':checked');
+            if (chkPwdVal==false && chkAtlVal==true){
+                $("#autoLogin").prop("checked",false);
+            }
+        });
+
+        //如果自动登陆，则必保存密码。
+        $("#autoLogin").change(function() {
+            var chkAtlVal=$(this).is(':checked');
+            var chkPwdVal=$("#keepPwd").is(':checked');
+            if (chkAtlVal==true && chkPwdVal==false){
+                $("#keepPwd").prop("checked",true);
+            }
+        });
+
+        //关闭退出按钮点击事件。
+        $('#loginInterface .close').off('click').on('click',function() {
+            var browseType = navigator.userAgent;
+            if (browseType.indexOf("MSIE") > 0) {
+                if (browseType.indexOf("MSIE 6.0") > 0) {
+                    window.opener = null;
+                    window.close();
+                } else {
+                    window.open('', '_top');
+                    window.top.close();
+                }
+            } else if (browseType.indexOf("Firefox") > 0) {
+                prompt('error', '该浏览器不支持脚本关闭功能！', 1000);
+            } else {
+                prompt('error', '该浏览器不支持脚本关闭功能！', 1000);
+            }
+        });
+    });
+</script>
+</body>
+</html>

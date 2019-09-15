@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<base href="http://localhost:8080/comm/">
+<meta charset="UTF-8">
+<title>地图复杂聚合物测试</title>
+<style type="text/css">
+body,html,#map {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	margin:0;
+	font-family:"微软雅黑";
+}
+/*----------------地图中相关终端显示样式----------------*/
+.endUser {
+    width: 34px;
+    height: 34px;
+    border: 1px solid #a01a1a;
+    position: absolute;
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+}
+.endUser:hover {
+    opacity: .8;
+}
+.endUser > img {
+    width: 30px;
+    height: 30px;
+    border-radius: 2px;
+}
+.endUser .endUserAfter {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 1px;
+    border-top: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-left: 4px solid #a01a1a;
+    border-bottom: 4px solid #a01a1a;
+    transform: rotate(-45deg);
+    position: absolute;
+    top: 29px;
+    left: 12px;
+    z-index: 9;
+}
+.endUser.leave {
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray;
+    background-color: rgba(229, 229, 229, 1);
+}
+.endUser.leave .endUserAfter .white {
+    border-left: 4px solid rgba(236, 236, 236, 1);
+    border-bottom: 4px solid rgba(236, 236, 236, 1);
+}
+.endUser .endUserAfter .white {
+    border-top: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-left: 4px solid #ffffff;
+    border-bottom: 4px solid #ffffff;
+    position: absolute;
+    left: -3px;
+    top: -5px;
+}
+.endUser > .name {
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 12px;
+    position: absolute;
+    white-space: nowrap;
+    background-color: #a01a1a;
+    border-radius: 3px;
+    border: 1px solid #fff;
+    left: 50%;
+    transform: translate(-50%, -23px);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+.endUser .gif {
+    position: absolute;
+    top: -50px;
+    left: 4px;
+    width: 25px;
+    height: 25px;
+}
+.endUser .message {
+    font-size: 13px;
+    max-width: 120px;
+    max-height: 60px;
+    padding: 2px 5px 5px 5px;
+    background-color: #58A953;
+    position: absolute;
+    top: 4px;
+    left: 43px;
+    border: 1px solid #494e51;
+    border-radius: 3px;
+    line-height: 18px;
+    color: #FFF;
+    word-wrap: break-word;
+    word-break: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+.endUser .corner {
+    width: 7px;
+    height: 7px;
+    border: 1px solid #494e51;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 12px;
+    left: 40px;
+    background-color: #58A953;
+    border-top: none;
+    border-right: none;
+}
+
+/*----------------地图中聚合物点击弹出信息窗显示样式----------------*/
+.convClkShowDiv{
+	max-width:250px;
+	max-height:204px;
+	background-color:rgba(250,250,250,.85);
+	position: relative;
+	top:1px;
+	left:1px;
+	border-radius: 3px;
+	box-shadow: 0px 0px 1px 1px rgba(175,175,175,1);
+	overflow: hidden;
+}
+.convClkShowDiv .clearfix:after{
+    content:'';
+    clear: both;
+    display: block;
+    padding: 1px 1px 8px 2px;
+}
+.convClkShowDiv ul{
+    overflow:auto;
+    border-radius: 3px;
+    width:250px;
+    height:204px;
+    padding-bottom: 8px;
+    padding-left: 1px;
+    margin-top: 2px;
+}
+.convClkShowDiv ul li{
+    float: left;
+    position: relative;
+    overflow: hidden;
+    margin-top: 8px;
+    margin-left: 2px;
+    list-style: none;
+    width: 75px;
+    cursor: pointer;
+}
+.convClkShowDiv ul li .lableDiv.leave {
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray;
+    background-color: rgba(229, 229, 229, 1);
+}
+.convClkShowDiv ul li .lableDiv{
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 12px;
+    background-color: rgb(158, 107, 153);;
+    border-radius: 3px;
+    border: 1px solid #fff;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 2px;
+    line-height: 19px;
+    color: white;
+    max-width: 68px;
+}
+.convClkShowDiv ul li .imgDiv{
+    width: 34px;
+    height: 34px;
+    border-radius: 2px;
+    border: 1px solid #a01a1a;
+   	background-color: #9FC2DE;
+	background-image: url(../static/img/userHeadBackGround.png);
+	background-repeat:no-repeat; 
+	background-size:100% 100%;
+	-moz-background-size:100% 100%;
+    margin:0 auto;
+    overflow: hidden;
+}
+.convClkShowDiv ul li .imgDiv.leave {
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray;
+    background-color: rgba(229, 229, 229, 1);
+}
+.convClkShowDiv ul li .imgDiv img{
+    width: 100%;
+    height: 100%;
+}
+
+/*----------------地图中相关信息弹窗样式调整---------------*/
+.BMap_center,.BMap_bottom,.BMap_top {
+	display: none !important;
+}
+.BMap_pop>img {
+	display: none !important;
+}
+.BMap_pop>div>img {
+	display: none !important;
+}
+.BMap_pop>div:nth-child(1) {
+	display: none !important;
+}
+.BMap_pop>div:nth-child(3) {
+	display: none !important;
+}
+.BMap_pop>div:nth-child(5) {
+	display: none !important;
+}
+.BMap_pop>div:nth-child(7) {
+	display: none !important;
+}
+.BMap_shadow {
+	display: none !important;
+}
+
+::-webkit-scrollbar-button{
+    display: none;
+}
+::-webkit-scrollbar {
+    width:8px;
+    height:13px;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background-color:#c2c2c2;
+    background-clip:padding-box;
+    min-height:28px;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color:#929292;
+}
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=6XpaIRi9whiGdkRa8eYn5MQBaEOPN2r8"></script>
+<script type="text/javascript" src="static/EasyUI151/jquery.min.js"></script>
+<script type="text/javascript" src="static/gis/baidu/TextIconOverlay.js"></script>
+<script type="text/javascript" src="static/gis/baidu/MarkerClusterer.js"></script>
+<script type="text/javascript" src="static/gis/baidu/baiduMap.js"></script>
+<script type="text/javascript" src="static/EasyUI151/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="static/EasyUI151/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="static/EasyUI151/themes/insdep/jquery.insdep-extend.min.js"></script>
+<script type="text/javascript" src="static/lang/comm-lang-load.js"></script>
+<script type="text/javascript" src="static/js/prompt.js"></script>
+</head>
+<body>
+<div id="map"></div>
+<script>
+	var opts = {
+		width : 250, 		// 信息窗口宽度
+		height: 80, 		// 信息窗口高度
+		title : "信息窗口" , 	// 信息窗口标题
+		enableMessage:true	// 设置允许信息窗发送短息
+	};
+	
+	//地图初始化。
+    var map = new BMap.Map("map",{enableMapClick:false});
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);   
+    map.setCurrentCity("北京");          // 设置地图显示城市  
+    map.enableScrollWheelZoom(true);     //开启滚轮缩放 
+    
+    var MAX = 500;
+	var markers = [];
+	var markerClusterer = null;
+	for (var i = 0; i < MAX; i++) {
+		var pt = new BMap.Point(Math.random()*40+85, Math.random()*30+21);
+		var onlineFlag = true;
+		if (i%3 == 0) onlineFlag = false;
+		var marker = new EndUserOverlay(pt,'终端'+(i+1),'终端'+(i+1),'/upload/headicon/1250.png',null,'#006100',onlineFlag);
+		map.addOverlay(marker);
+		marker.addEventListener('click',function(event) {
+			map.closeInfoWindow();
+			var num = $(this).attr("id");
+			var points = $(this).attr("endUserPoint");
+			var poi = points.split(",");
+			var curPoi = new BMap.Point(Number(poi[0]),Number(poi[1]));
+			var infoWindow = new BMap.InfoWindow(num,opts); // 创建信息窗口对象 
+			map.openInfoWindow(infoWindow,curPoi); //开启信息窗口
+		});
+		marker.addEventListener('contextmenu',function(event) {
+			map.closeInfoWindow();
+			var num = $(this).attr("id");
+			alert(num);
+		});
+		markers.push(marker);
+	}
+	
+	//最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
+	markerClusterer = new BMapLib.MarkerClusterer(map, {markers:markers});
+</script>
+</body>
+</html>

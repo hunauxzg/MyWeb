@@ -1,0 +1,21 @@
+#tt {
+    width: 210px;
+    height: 180px;
+    overflow: auto;
+}
+#tt .tree-file {
+    background: url('../img/mission.png') no-repeat;
+    background-size: cover;
+    position: relative;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+}
+#tt .tree-folder {
+    background: url('../img/profile.png') no-repeat;
+    background-size: contain;
+    position: relative;
+
+    width: 20px;
+    height: 20px;
+}
